@@ -43,28 +43,33 @@ public class PlayerMovement : MonoBehaviour
                 //Check facing
                 if (playerMovement.x != 0)
                 {
-                    facingRight = playerMovement.x == 1 ? true : false;
-                    transform.localScale = new Vector3(playerMovement.x, 1, 1);
+                    facingRight = playerMovement.x > 0 ? true : false;
+                    Vector3 scale = Vector3.one;
+                    scale.x = facingRight ? 1 : -1;
+                    transform.localScale = scale;
                 }
             }
-            else
-                rb.velocity = Vector2.zero;
         }
         else
         {
             rb.gravityScale = 1;
+            rb.drag = 2;
             if (playerMovement.x != 0)
             {
                 //Check movement
                 Vector2 vel = Vector2.zero;
                 if (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall)
                     vel.x = playerMovement.x * moveSpeed;
-                vel.y = playerMovement.y * moveSpeed;
+                else
+                    vel.x = 0;
+                vel.y = rb.velocity.y;
                 rb.velocity = vel;
 
                 //Check facing
-                facingRight = playerMovement.x == 1 ? true : false;
-                transform.localScale = new Vector3(playerMovement.x, 1, 1);
+                facingRight = playerMovement.x > 0 ? true : false;
+                Vector3 scale = Vector3.one;
+                scale.x = facingRight ? 1 : -1;
+                transform.localScale = scale;
 
             }
 
@@ -88,10 +93,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if(collision.transform.tag == "Right Wall")
+        {
+            Debug.Log("Right Wall!");
             onRightWall = true;
+        }
         
         if(collision.transform.tag == "Left Wall")
+        {
+            Debug.Log("Left Wall!");
             onLeftWall = true;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -101,5 +112,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (collision.transform.tag == "Left Wall")
             onLeftWall = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.transform.tag == "Hole Entrance")
+        {
+            falling = true;
+            grounded = false;
+        }
     }
 }
