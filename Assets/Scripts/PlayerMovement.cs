@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     bool facingRight;
-    bool grounded;
+    bool grounded = true;
     bool falling;
     bool onRightWall;
     bool onLeftWall;
@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
             //Jump
             if (playerMovement.y > 0 && grounded)
             {
+                Debug.Log("Jump");
                 grounded = false;
                 rb.velocity = new Vector2(rb.velocity.x, moveSpeed * 2);
             }
@@ -110,8 +111,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.tag == "Ground")
         {
             Debug.Log(collision.transform.parent);
-            if(!falling)
-                grounded = true;
+            grounded = true;
         }
 
         if(collision.transform.tag == "Right Wall")

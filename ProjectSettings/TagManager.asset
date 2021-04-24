@@ -8,7 +8,7 @@ TagManager:
   - Wall
   - Left Wall
   - Right Wall
-  - StartGame
+  - Hole Entrance
   layers:
   - Default
   - TransparentFX
@@ -45,4 +45,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 4200590145
+    locked: 0
+  - name: Foreground
+    uniqueID: 1575175849
+    locked: 0
+  - name: Player
+    uniqueID: 3526298687
+    locked: 0
+  - name: Shop
+    uniqueID: 1741987397
     locked: 0
