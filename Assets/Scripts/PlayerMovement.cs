@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             if (playerMovement.y > 0 && grounded)
             {
                 grounded = false;
-                rb.velocity = new Vector2(rb.velocity.x, moveSpeed);
+                rb.velocity = new Vector2(rb.velocity.x, moveSpeed * 2);
             }
 
         }
@@ -88,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.transform.tag == "Ground")
         {
+            Debug.Log(collision.gameObject.GetComponentInParent<Transform>().name);
             if(!falling)
                 grounded = true;
         }
