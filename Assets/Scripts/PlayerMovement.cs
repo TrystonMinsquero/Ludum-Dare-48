@@ -36,8 +36,8 @@ public class PlayerMovement : MonoBehaviour
         if (falling)
         {
             rb.gravityScale = 0;
-            float minPlayerHeight = LevelManager.mainCamera.transform.position.y - 5 + bc.size.y / 2;
-            float maxPlayerHeight = LevelManager.mainCamera.transform.position.y + 5 - bc.size.y / 2;
+            float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + bc.size.y / 2;
+            float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - bc.size.y / 2;
             //Directional movement
             if (playerMovement != Vector2.zero)
             {

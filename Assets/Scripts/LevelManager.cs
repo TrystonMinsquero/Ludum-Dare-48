@@ -5,11 +5,17 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance;
 
     public float levelSpeed = 5f;
+    public float camTravelTime = 2f;
+
+    static float CAM_TRAVEL_TIME;
 
     public static LevelSection levelSection = LevelSection.GROUND;
-    public static GameObject mainCamera;
+    public static GameObject cam;
     public static int camWidth = 10;
     public static int camHeight = 16;
+
+    public GameObject cameraPositions;
+    public static Transform[] camPositions;
 
     float distanceTraveled;
 
@@ -22,12 +28,15 @@ public class LevelManager : MonoBehaviour
         else
             instance = this;
 
-        mainCamera = GameObject.Find("Main Camera");
+        cam = GameObject.Find("Main Camera");
+        camPositions = cameraPositions.GetComponentsInChildren<Transform>();
+        CAM_TRAVEL_TIME = camTravelTime;
     }
 
     public void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
+        ChangeCameraPosition(CameraPosition.INITIAL, true);
     }
 
     public void FixedUpdate()
@@ -51,8 +60,38 @@ public class LevelManager : MonoBehaviour
     {
         levelSection++;
 
-        //Do Stuff
-        //switch (section) { }
+        switch(levelSection)
+        {
+            case LevelSection.CRUST:
+                ChangeCameraPosition(CameraPosition.GAME);
+                break;
+        }
     }
+
+    public static void ChangeCameraPosition(CameraPosition cameraPosition, bool instant = false)
+    {
+        float tempTime = CAM_TRAVEL_TIME;
+        CAM_TRAVEL_TIME = instant ? 0 : tempTime;
+
+        foreach(Transform position in camPositions)
+        {
+            if (cameraPosition == CameraPosition.GAME && position.name == "Game")
+                cam.transform.position = Vector2.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
+            if (cameraPosition == CameraPosition.INITIAL && position.name == "Initial")
+                cam.transform.position = Vector2.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
+            if (cameraPosition == CameraPosition.SHOP && position.name == "Shop")
+                cam.transform.position = Vector2.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
+        }
+
+        CAM_TRAVEL_TIME = tempTime;
+    }
+
+}
+
+public enum CameraPosition
+{
+    INITIAL,
+    SHOP,
+    GAME
 
 }
