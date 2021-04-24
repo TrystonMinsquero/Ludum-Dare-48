@@ -10,9 +10,9 @@ public class LevelGenerator : MonoBehaviour
     {
         //GenerateLevel();
     }
-    void GenerateLevel(Texture2D segement)
+    void GenerateLevel(Texture2D segment)
     {
-        map = segement;
+        map = segment;
         for(int x = 0; x < map.width;x++)
         {
             for(int y = 0; y < map.height;y++)
