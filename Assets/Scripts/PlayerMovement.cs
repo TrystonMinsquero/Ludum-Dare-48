@@ -44,8 +44,8 @@ public class PlayerMovement : MonoBehaviour
                 if (playerMovement.x != 0)
                 {
                     facingRight = playerMovement.x > 0 ? true : false;
-                    Vector3 scale = Vector3.one;
-                    scale.x = facingRight ? 1 : -1;
+                    Vector3 scale = Vector3.one * 2;
+                    scale.x = facingRight ? 2 : -2;
                     transform.localScale = scale;
                 }
             }
@@ -121,6 +121,8 @@ public class PlayerMovement : MonoBehaviour
         {
             falling = true;
             grounded = false;
+
+            LevelManager.ChangeLevelSection(LevelSection.CRUST);
         }
     }
 }
