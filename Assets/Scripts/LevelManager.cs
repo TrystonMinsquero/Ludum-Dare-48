@@ -95,31 +95,12 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public static void ChangeCameraPosition(CameraPosition cameraPosition, bool instant = false)
+    public static void ChangeCameraPosition(CameraPosition cameraPosition)
     {
-        float tempTime = CAM_TRAVEL_TIME;
-        CAM_TRAVEL_TIME = instant ? 0 : tempTime;
 
-        foreach(Transform position in camPositions)
-        {
-            if (cameraPosition == CameraPosition.GAME && position.name == "Game")
-            {
-                Debug.Log("Change camera to game");
-                cam.transform.position = Vector3.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
-            }
-            if (cameraPosition == CameraPosition.INITIAL && position.name == "Initial")
-            {
-                Debug.Log("Change camera to inital");
-                cam.transform.position = Vector3.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
-            }
-            if (cameraPosition == CameraPosition.SHOP && position.name == "Shop")
-            {
-                Debug.Log("Change camera to shop");
-                cam.transform.position = Vector3.Lerp(cam.transform.position, position.position, CAM_TRAVEL_TIME);
-            }
-        }
+        cam.transform.position = Vector3.Lerp(cam.transform.position, camPositions[(int)cameraPosition].position, CAM_TRAVEL_TIME);
+        CAM_POSITION = cameraPosition;
 
-        CAM_TRAVEL_TIME = tempTime;
     }
 
 }
