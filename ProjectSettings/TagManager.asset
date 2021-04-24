@@ -8,7 +8,7 @@ TagManager:
   - Wall
   - Left Wall
   - Right Wall
-  - Hole Entrance
+  - Transition
   layers:
   - Default
   - TransparentFX

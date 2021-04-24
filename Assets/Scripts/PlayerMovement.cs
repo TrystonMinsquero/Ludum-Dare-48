@@ -138,12 +138,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag == "Hole Entrance")
+        if(collision.transform.tag == "Transition")
         {
             falling = true;
             grounded = false;
 
-            LevelManager.ChangeLevelSection(LevelSection.CRUST);
+            LevelManager.NextLevelSection();
         }
 
 

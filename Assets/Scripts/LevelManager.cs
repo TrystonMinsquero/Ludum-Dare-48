@@ -47,4 +47,12 @@ public class LevelManager : MonoBehaviour
         //switch (section) { }
     }
 
+    public static void NextLevelSection()
+    {
+        levelSection++;
+
+        //Do Stuff
+        //switch (section) { }
+    }
+
 }
