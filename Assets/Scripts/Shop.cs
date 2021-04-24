@@ -65,7 +65,10 @@ public class Shop : MonoBehaviour
             timeSlowCost += 5;
         }
     }
-
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        //if(Input.GetKey(KeyCode.Space)
+    }
     private void Awake()
     {
         if (Instance == null)
