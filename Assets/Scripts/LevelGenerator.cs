@@ -65,22 +65,37 @@ public class LevelGenerator : MonoBehaviour
 
         if (pixelColor.a == 0)
         { return; }
-        
-        /*Convert.ToInt32(pixelColor.)
 
-        foreach(ColorToPrefab colorMapping in colorMappings)
+        ColorUtility.ToHtmlStringRGB(pixelColor);
+        int tileIndex = int.Parse(ColorUtility.ToHtmlStringRGB(pixelColor), System.Globalization.NumberStyles.HexNumber);
+        Debug.Log("(" + x + ", " + y + ") = " + tileIndex);
+
+        /*
+        foreach (ColorToPrefab colorMapping in colorMappings)
         {
             switch(tilemap)
             {
                 case TileMapType.FEEDTAPE:
-                    if(colorMapping.color.)
+                    if(colorMapping.color)
             }
             if(colorMapping.color.Equals(pixelColor))
             {
                 Vector2 position = new Vector2(x, y);
                 Instantiate(colorMapping.prefab, position, Quaternion.identity,transform);
             }
-        }*/
+        }
+        */
+    }
+
+    public static string ToRGBHex(Color c)
+    {
+        return string.Format("#{0:X2}{1:X2}{2:X2}", ToByte(c.r), ToByte(c.g), ToByte(c.b));
+    }
+
+    private static byte ToByte(float f)
+    {
+        f = Mathf.Clamp01(f);
+        return (byte)(f * 255);
     }
 
 }

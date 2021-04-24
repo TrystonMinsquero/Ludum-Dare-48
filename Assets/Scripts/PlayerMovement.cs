@@ -48,7 +48,6 @@ public class PlayerMovement : MonoBehaviour
                 if (playerMovement.x != 0 && (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall))
                     vel.x = playerMovement.x * moveSpeed;
 
-                Debug.Log(bc.size);
                 //Check y velocity
                 if (playerMovement.y != 0 && (transform.position.y < maxPlayerHeight && playerMovement.y <= 0 || transform.position.y > minPlayerHeight && playerMovement.y >= 0))
                     vel.y = playerMovement.y * moveSpeed;
@@ -97,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
             //Jump
             if (playerMovement.y > 0 && grounded)
             {
-                Debug.Log("Jump");
+                //Debug.Log("Jump");
                 grounded = false;
                 rb.velocity = new Vector2(rb.velocity.x, moveSpeed * 2);
             }
