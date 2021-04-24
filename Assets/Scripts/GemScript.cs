@@ -10,6 +10,7 @@ public class GemScript : MonoBehaviour
     {
         Destroy(gameObject);
         //add valueOfGem to players $$$
+        DataControl.money += valueOfGem; 
     }
   
 }
