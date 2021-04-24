@@ -68,6 +68,9 @@ public class Shop : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         //if(Input.GetKey(KeyCode.Space)
+        //{
+        //      Bring up UI.
+        //}
     }
     private void Awake()
     {
