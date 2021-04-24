@@ -2,11 +2,14 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    float moveSpeed = 3f;
+    public float moveSpeed = 3f;
+    public float drag = 1f;
 
 
     Controls controls;
     Rigidbody2D rb;
+    BoxCollider2D bc;
+
 
     bool facingRight;
     bool grounded;
@@ -20,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
         controls = new Controls();
         controls.Enable();
         rb = this.GetComponent<Rigidbody2D>();
+        bc = this.GetComponent<BoxCollider2D>();
+
+        rb.drag = drag;
     }
 
     private void FixedUpdate()
@@ -30,13 +36,23 @@ public class PlayerMovement : MonoBehaviour
         if (falling)
         {
             rb.gravityScale = 0;
+            float minPlayerHeight = LevelManager.mainCamera.transform.position.y - 5 + bc.size.y / 2;
+            float maxPlayerHeight = LevelManager.mainCamera.transform.position.y + 5 - bc.size.y / 2;
             //Directional movement
             if (playerMovement != Vector2.zero)
             {
                 //Check movement
-                Vector2 vel = Vector2.zero;
-                if (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall)
+                Vector2 vel = rb.velocity;
+
+                //Check x velocity
+                if (playerMovement.x != 0 && (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall))
                     vel.x = playerMovement.x * moveSpeed;
+
+                Debug.Log(bc.size);
+                //Check y velocity
+                if (playerMovement.y != 0 && (transform.position.y < maxPlayerHeight && playerMovement.y <= 0 || transform.position.y > minPlayerHeight && playerMovement.y >= 0))
+                    vel.y = playerMovement.y * moveSpeed;
+
                 vel.y = playerMovement.y * moveSpeed;
                 rb.velocity = vel;
 
@@ -49,11 +65,16 @@ public class PlayerMovement : MonoBehaviour
                     transform.localScale = scale;
                 }
             }
+
+            if (transform.position.y > maxPlayerHeight)
+                transform.position = new Vector2(transform.position.x, maxPlayerHeight);
+
+            if (transform.position.y < minPlayerHeight)
+                transform.position = new Vector2(transform.position.x, minPlayerHeight);
         }
         else
         {
             rb.gravityScale = 1;
-            rb.drag = 2;
             if (playerMovement.x != 0)
             {
                 //Check movement
@@ -88,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.transform.tag == "Ground")
         {
-            Debug.Log(collision.gameObject.GetComponentInParent<Transform>().name);
+            Debug.Log(collision.transform.parent);
             if(!falling)
                 grounded = true;
         }
@@ -124,5 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
             LevelManager.ChangeLevelSection(LevelSection.CRUST);
         }
+
+
     }
 }
