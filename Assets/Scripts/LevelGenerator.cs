@@ -34,6 +34,8 @@ public class LevelGenerator : MonoBehaviour
 
         foregroundMaps = Resources.LoadAll<Texture2D>("Segments/Foreground");
         backgroundMaps = Resources.LoadAll<Texture2D>("Segments/Background");
+
+        GenerateTile(backgroundMaps[0], 0, 0, TileMapType.BACKGROUND);
         //GenerateLevel();
     }
 
