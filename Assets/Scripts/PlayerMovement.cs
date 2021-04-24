@@ -9,8 +9,10 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
 
     bool facingRight;
-    bool grounded = true;
+    bool grounded;
     bool falling;
+    bool onRightWall;
+    bool onLeftWall;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +33,14 @@ public class PlayerMovement : MonoBehaviour
             //Directional movement
             if (playerMovement != Vector2.zero)
             {
-                rb.velocity = playerMovement * moveSpeed;
+                //Check movement
+                Vector2 vel = Vector2.zero;
+                if (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall)
+                    vel.x = playerMovement.x * moveSpeed;
+                vel.y = playerMovement.y * moveSpeed;
+                rb.velocity = vel;
+
+                //Check facing
                 if (playerMovement.x != 0)
                 {
                     facingRight = playerMovement.x == 1 ? true : false;
@@ -46,23 +55,51 @@ public class PlayerMovement : MonoBehaviour
             rb.gravityScale = 1;
             if (playerMovement.x != 0)
             {
-                rb.velocity = new Vector2(playerMovement.x * moveSpeed, rb.velocity.y);
-            }
-            else if (grounded)
-            {
-                rb.velocity = Vector2.zero;
+                //Check movement
+                Vector2 vel = Vector2.zero;
+                if (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall)
+                    vel.x = playerMovement.x * moveSpeed;
+                vel.y = playerMovement.y * moveSpeed;
+                rb.velocity = vel;
+
+                //Check facing
+                facingRight = playerMovement.x == 1 ? true : false;
+                transform.localScale = new Vector3(playerMovement.x, 1, 1);
+
             }
 
+            //Jump
             if (playerMovement.y > 0 && grounded)
             {
                 grounded = false;
-                rb.AddForce(new Vector2(0, moveSpeed * 2));
+                rb.velocity = new Vector2(rb.velocity.x, moveSpeed);
             }
 
         }
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Ground")
+        {
+            if(!falling)
+                grounded = true;
+        }
+
+        if(collision.transform.tag == "Right Wall")
+            onRightWall = true;
         
+        if(collision.transform.tag == "Left Wall")
+            onLeftWall = true;
+    }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Right Wall")
+            onRightWall = false;
 
-
+        if (collision.transform.tag == "Left Wall")
+            onLeftWall = false;
     }
 }
