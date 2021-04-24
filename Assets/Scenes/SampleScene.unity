@@ -17732,7 +17732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40881e651b431964da823668f4602a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 0}
+  numberOfDifficulties: 10
   colorMappings:
   - color: {r: 0, g: 0, b: 0, a: 0}
     prefab: {fileID: 0}

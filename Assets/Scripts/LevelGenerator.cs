@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public Texture2D map;
-
+    public int numberOfDifficulties = 10;
+    public static List<Texture2D[]> obstacleMaps;
+    public static Texture2D[] foregroundMaps;
+    public static Texture2D[] backgroundMaps;
     public ColorToPrefab[] colorMappings;
+
+
+
 
     enum TileMapType
     {
@@ -19,6 +25,15 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
+        obstacleMaps = new List<Texture2D[]>();
+
+        for( int i = 0; i < numberOfDifficulties; i++)
+        {
+            obstacleMaps.Add(Resources.LoadAll<Texture2D>("Segments/Obstacles/Difficulty_" + i));
+        }
+
+        foregroundMaps = Resources.LoadAll<Texture2D>("Segments/Foreground");
+        backgroundMaps = Resources.LoadAll<Texture2D>("Segments/Background");
         //GenerateLevel();
     }
 
@@ -29,12 +44,11 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateForeground(Texture2D segment)
     {
-        map = segment;
-        for (int x = 0; x < map.width; x++)
+        for (int x = 0; x < segment.width; x++)
         {
-            for (int y = 0; y < map.height; y++)
+            for (int y = 0; y < segment.height; y++)
             {
-                GenerateTile(x, y);
+                GenerateTile(segment, x, y);
             }
         }
 
@@ -50,7 +64,7 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-    void GenerateTile(int x, int y, TileMapType tilemap = TileMapType.FOREGROUND)
+    void GenerateTile(Texture2D map, int x, int y, TileMapType tilemap = TileMapType.FOREGROUND)
     {
         Color pixelColor = map.GetPixel(x, y);
         
