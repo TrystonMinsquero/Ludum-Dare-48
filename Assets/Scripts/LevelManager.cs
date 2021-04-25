@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
 
     public static float distanceTraveled;
     public static bool transition;
+    public static int maxDifficulty = 1;
 
     Rigidbody2D rb;
 
@@ -77,9 +78,10 @@ public class LevelManager : MonoBehaviour
 
         distanceTraveled = rb.position.y;
 
-        if(distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE)
+        if(distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
         {
             transition = true;
+            maxDifficulty++;
             NextLevelSection();
         }
     }
