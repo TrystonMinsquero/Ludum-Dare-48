@@ -11,6 +11,13 @@ public class LevelGenerator : MonoBehaviour
     public float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
+    public Transform[] environmentPoints = new Transform[2];
+    public Transform[] obstaclePoints = new Transform[2];
+    public Transform[] beginningPoints = new Transform[2];
+
+    public Transform environmentStartClear;
+    public Transform obstacleStartClear;
+    public Transform beginningStartClear;
 
     private static GameObject obstacleFolder;
     private static GameObject obstaclePrefab;
@@ -122,10 +129,22 @@ private void Awake()
     public void FixedUpdate()
     {
         Transform[] obstacles = obstacleFolder.GetComponentsInChildren<Transform>();
-        if(obstacles.Length == 0)
+        
+        if(obstacles.Length > 0)
             foreach(Transform obstacle in obstacles)
-                if (obstacle.position.y > LevelManager.cam.transform.position.y + LevelManager.camHeight)
+                if (obstacle != obstacleFolder.transform && obstacle.position.y > LevelManager.cam.transform.position.y + LevelManager.camHeight)
+                {
                     Destroy(obstacle.gameObject);
+                }
+
+        if (LevelManager.falling)
+        {
+            if(LevelManager.distanceTraveled - LevelManager.camHeight <= 35)
+                ClearRowOfTiles(beginningPoints[0].position, beginningPoints[1].position);
+            ClearRowOfTiles(environmentPoints[0].position, environmentPoints[1].position);
+            ClearRowOfTiles(obstaclePoints[0].position, obstaclePoints[1].position);
+
+        }
         
         if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0)
         {
@@ -135,7 +154,7 @@ private void Awake()
 
     public static void GenerateSegment(int difficulty)
     {
-        Debug.Log("Distance To Place = " + distanceToPlace);
+        //Debug.Log("Distance To Place = " + distanceToPlace);
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
@@ -240,6 +259,21 @@ private void Awake()
                 tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
         }
 
+    }
+
+    private static void ClearRowOfTiles(Vector2 startPosition, Vector2 endPosition)
+    {
+        int length = (int)Mathf.Round(endPosition.x - startPosition.x + 1);
+        foreach(Tilemap tilemap in tileMaps)
+        {
+            for(int i = 0; i < length; i++)
+            {
+                Vector3Int gridPos = tilemap.WorldToCell(startPosition + Vector2.right * i);
+                if (tilemap.HasTile(gridPos))
+                    tilemap.SetTile(gridPos, null);
+
+            }
+        }
     }
 
     private static void SetTransitionIndex()

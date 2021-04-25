@@ -36,6 +36,8 @@ public class LevelManager : MonoBehaviour
     public static AudioSource[] themes;
     public static AudioSource currentSong;
 
+    public static bool falling;
+
     Rigidbody2D rb;
 
     public void Awake()
