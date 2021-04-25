@@ -149,12 +149,15 @@ public class LevelManager : MonoBehaviour
     {
         if (currentSong != null)
             currentSong.loop = false;
+
         
         if(song != null)
         {
-            song.loop = true;
+            if(song != themes[(int)LevelSection.MANTLE])
+                song.loop = true;
             song.Play();
         }
+        
 
         for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
         {
@@ -167,7 +170,22 @@ public class LevelManager : MonoBehaviour
         if(currentSong != null)
             currentSong.volume = 0;
         if (song != null)
+        {
             song.volume = maxVolume;
+            if(song == themes[(int)LevelSection.MANTLE])
+            {
+                while (song.isPlaying)
+                {
+                    yield return null;
+                }
+                song.volume = 0;
+                song.loop = false;
+                song = themes[(int)LevelSection.MANTLE + 1];
+                song.volume = maxVolume;
+                song.loop = true;
+                song.Play();
+            }
+        }
 
         currentSong = song;
     }
@@ -175,7 +193,8 @@ public class LevelManager : MonoBehaviour
     IEnumerator ExecuteAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        StartCoroutine(transitionToSong(themes[(int)levelSection]));
+        AudioSource song = levelSection > LevelSection.MANTLE ? themes[(int)levelSection + 1] : themes[(int)levelSection];
+        StartCoroutine(transitionToSong(song));
     }
 
 }

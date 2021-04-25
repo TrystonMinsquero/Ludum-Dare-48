@@ -148,7 +148,7 @@ private void Awake()
         
         if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0)
         {
-            GenerateSegment((int)UnityEngine.Random.Range(0, LevelManager.maxDifficulty + 1));
+            GenerateSegment((int)UnityEngine.Random.Range(.9f, LevelManager.maxDifficulty + 1));
         }
     }
 
