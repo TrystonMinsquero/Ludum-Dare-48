@@ -18,9 +18,11 @@ public class LevelGenerator : MonoBehaviour
     public static List<Texture2D[]> obstacleMaps;
     public static Texture2D[] foregroundMaps;
     public static Texture2D[] backgroundMaps;
+    public static Texture2D[] transitionMaps;
 
     public static List<TileBase[]> obstacleTiles;
     public static List<TileBase[]> environmentTiles;
+    public static List<TileBase[]> transitionTiles;
 
     public Tilemap[] tile_Maps;
 
@@ -29,7 +31,9 @@ public class LevelGenerator : MonoBehaviour
     public static int distanceToPlace = 5;
     public static int sectionsGenerated = 0;
 
-    private void Awake()
+    public static int transitionIndex = 0;
+
+private void Awake()
     {
         if (instance != null)
             Destroy(this.gameObject);
@@ -42,6 +46,7 @@ public class LevelGenerator : MonoBehaviour
         obstacleMaps = new List<Texture2D[]>();
         obstacleTiles = new List<TileBase[]>();
         environmentTiles = new List<TileBase[]>();
+        transitionTiles = new List<TileBase[]>();
         obstacleFolder = obstacle_Folder;
         obstaclePrefab = obstacle_Prefab;
         tileMaps = tile_Maps;
@@ -57,23 +62,33 @@ public class LevelGenerator : MonoBehaviour
         //Debug.Log("Foreground maps loaded " + foregroundMaps.Length + " maps");
         backgroundMaps = Resources.LoadAll<Texture2D>("Segments/Background");
         //Debug.Log("Background maps loaded " + backgroundMaps.Length + " maps");
+        transitionMaps = Resources.LoadAll<Texture2D>("Segments/Transitions");
+        Debug.Log("Transition maps loaded " + transitionMaps.Length + " maps");
 
-        for(int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM; i++)
+        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM; i++)
         {
             obstacleTiles.Add(null);
             environmentTiles.Add(null);
         }
+        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM/2; i++)
+        {
+            transitionTiles.Add(null);
+        }
+
         obstacleTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
         obstacleTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
-        //obstacleTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Obstacles/Tiles");
+        obstacleTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Obstacles/Tiles");
         //obstacleTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Obstacles/Tiles");
 
         environmentTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
         environmentTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
-        //environmentTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Environment/Tiles");
+        environmentTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Environment/Tiles");
         //environmentTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Environment/Tiles");
 
-        foreach(TileBase[] tiles in obstacleTiles)
+        transitionTiles[0] = Resources.LoadAll<TileBase>("TileMaps/Crust/Transition/Tiles");
+        //transitionTiles[1] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Transition/Tiles");
+
+        foreach (TileBase[] tiles in obstacleTiles)
         {
             if (tiles == null)
                 continue;
@@ -87,7 +102,14 @@ public class LevelGenerator : MonoBehaviour
             LevelGenerator.InsertionSort(tiles);
         }
 
-        GenerateSegment(0);
+        foreach (TileBase[] tiles in transitionTiles)
+        {
+            if (tiles == null)
+                continue;
+            LevelGenerator.InsertionSort(tiles);
+        }
+
+            GenerateSegment(0);
         distanceToPlace += 10;
         GenerateSegment(0);
         distanceToPlace += 10;
@@ -113,8 +135,13 @@ public class LevelGenerator : MonoBehaviour
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
-        GenerateForeground(obstacleMaps[difficulty][(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)]);
+        if(LevelManager.transition)
+            GenerateForeground(transitionMaps[0]);
+        else
+            GenerateForeground(obstacleMaps[difficulty][(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)]);
         sectionsGenerated++;
+        if (LevelManager.transition)
+            LevelManager.transition = false;
     }
 
     private static void GenerateForeground(Texture2D segment)
@@ -161,7 +188,7 @@ public class LevelGenerator : MonoBehaviour
         Color pixelColor = map.GetPixel(x, y);
         Tilemap tileMap = tileMaps[(int)tileMapType];
 
-        Vector2 pos = tileMapType == TileMapType.FOREGROUND ? 
+        Vector2 pos = tileMapType == TileMapType.FOREGROUND && !LevelManager.transition ? 
             (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 5.5f
             : (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 8.5f;
 
@@ -179,19 +206,46 @@ public class LevelGenerator : MonoBehaviour
         if (tileMapType == TileMapType.FOREGROUND)
         {
             //Add coins
-            if(tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
-                Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
+
+            if (!LevelManager.transition)
+            {
+                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
+                    Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
+                else
+                    tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
+                Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+            }
             else
-                tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
-            Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+            {
+                SetTransitionIndex();
+                if (tileIndex > transitionTiles[transitionIndex].Length)
+                    Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
+                else
+                    tileMap.SetTile(gridPos, transitionTiles[transitionIndex][tileIndex]);
+            }
+
         }
         else
         {
-            if (tileIndex > environmentTiles[(int)LevelManager.levelSection].Length)
+            int sectionIndex = LevelManager.transition ? (int)LevelManager.levelSection - 1 : (int)LevelManager.levelSection;
+            if (tileIndex > environmentTiles[sectionIndex].Length)
                 Debug.LogError("Environment (" + x + ", " + y + ") = " + tileIndex);
-            tileMap.SetTile(gridPos, environmentTiles[(int)LevelManager.levelSection][tileIndex]);
+            tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
         }
 
+    }
+
+    private static void SetTransitionIndex()
+    {
+        switch (LevelManager.levelSection)
+        {
+            case LevelSection.MANTLE:
+                transitionIndex = 0;
+                break;
+            case LevelSection.CORE:
+                transitionIndex = 1;
+                break;
+        }
     }
 
     public enum TileMapType
