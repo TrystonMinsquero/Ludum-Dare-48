@@ -91,7 +91,7 @@ public class LevelGenerator : MonoBehaviour
         distanceToPlace += 10;
         GenerateSegment(0);
         distanceToPlace += 10;
-        GenerateSegment(1);
+        sectionsGenerated--;
     }
 
     public void FixedUpdate()
