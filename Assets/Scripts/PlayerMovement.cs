@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
             LevelManager.NextLevelSection();
             LevelManager.walls.SetActive(true);
+            LevelManager.falling = true;
             StartCoroutine(LevelManager.transitionToSong(LevelManager.themes[(int)LevelManager.levelSection]));
         }
 
