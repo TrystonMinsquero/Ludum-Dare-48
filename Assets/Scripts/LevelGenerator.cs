@@ -11,7 +11,7 @@ public class LevelGenerator : MonoBehaviour
     public static float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
-    public GameObject GemP;
+    public GameObject gem_Prefab;
     public Transform[] environmentPoints = new Transform[2];
     public Transform[] obstaclePoints = new Transform[2];
     public Transform[] beginningPoints = new Transform[2];
@@ -55,7 +55,7 @@ private void Awake()
         transitionTiles = new List<TileBase[]>();
         obstacleFolder = obstacle_Folder;
         obstaclePrefab = obstacle_Prefab;
-        gemPrefab = GemP;
+        gemPrefab = gem_Prefab;
         tileMaps = tile_Maps;
 
 
@@ -242,7 +242,9 @@ private void Awake()
                 else
                 {
                     if (tileIndex == 10879231)
-                        GemScript.createGem(pos, (UnityEngine.Random.Range(0, 100) < rareChance * 100), obstacleFolder.transform);
+                    {
+                        GemScript.createGem(gemPrefab, pos, (UnityEngine.Random.Range(0, 100) < rareChance * 100), obstacleFolder.transform);
+                    }
                     else
                     {
                         tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);

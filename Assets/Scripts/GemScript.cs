@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GemScript : MonoBehaviour
 {
     bool rareGem;
     int gemValue;
-
-    private static GameObject Gem;
-    public GameObject GemP;
 
     public int commonCrust;
     public int rareCrust;
@@ -29,9 +24,9 @@ public class GemScript : MonoBehaviour
 
     SpriteRenderer sr;
 
-    public static void createGem(Vector2 position, bool r, Transform parent)
+    public static void createGem(GameObject gemPrefab, Vector2 position, bool r, Transform parent)
     {
-        GameObject gem = Instantiate(Gem, parent);
+        GameObject gem = Instantiate(gemPrefab, parent);
         gem.GetComponent<GemScript>().rareGem = r;
         gem.transform.position = position;
         gem.GetComponent<GemScript>().SetColor();
@@ -40,7 +35,6 @@ public class GemScript : MonoBehaviour
     }
     public void Start()
     {
-        Gem = GemP;
         sr = this.GetComponent<SpriteRenderer>();
 
 
