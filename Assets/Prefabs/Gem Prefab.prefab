@@ -94,16 +94,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf16edf57c5d2f48a1381a5672db4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GemP: {fileID: 2031568402141275410}
   commonCrust: 1
   rareCrust: 3
   commonMantle: 3
   rareMantle: 5
   commonCore: 5
   rareCore: 10
-  commonCrustColor: {r: 0.68551975, g: 0.745283, b: 0.7426846, a: 0}
-  rareCrustColor: {r: 0.8679245, g: 0.8374935, b: 0.21698113, a: 0}
-  commonMantleColor: {r: 0.87058824, g: 0.8392157, b: 0.21568628, a: 0}
-  rareMantleColor: {r: 0.08566215, g: 0.27264825, b: 0.7264151, a: 0}
-  commonCoreColor: {r: 0.08627451, g: 0.27450982, b: 0.7294118, a: 0}
-  rareCoreColor: {r: 0.5043312, g: 0.07186722, b: 0.8962264, a: 0}
+  commonCrustColor: {r: 0.68551975, g: 0.745283, b: 0.7426846, a: 1}
+  rareCrustColor: {r: 0.8679245, g: 0.8374935, b: 0.21698113, a: 1}
+  commonMantleColor: {r: 0.87058824, g: 0.8392157, b: 0.21568628, a: 1}
+  rareMantleColor: {r: 0.08566215, g: 0.27264825, b: 0.7264151, a: 1}
+  commonCoreColor: {r: 0.08627451, g: 0.27450982, b: 0.7294118, a: 1}
+  rareCoreColor: {r: 0.5043312, g: 0.07186722, b: 0.8962264, a: 1}

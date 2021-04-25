@@ -1498,7 +1498,7 @@ MonoBehaviour:
   bubbleCostP: 5
   bubbleMaxP: 1
   timeSlowCostP: 5
-  timeSlowMaxP: 3
+  timeSlowMaxP: 99
   shopUI: {fileID: 237637380}
   suitMaxed: {fileID: 1411514433}
   upgradeSuit: {fileID: 1921304567}
@@ -1913,7 +1913,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 618448213}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 338704283}
+        m_MethodName: buyBubble
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &618448213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17655,7 +17666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ccaf129a02c1c34a86fae89698f18e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyP: 99999999
+  moneyP: 50
   bubblesP: 0
   timeSlowsP: 0
   suitLevelP: 0
@@ -19338,7 +19349,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2015767286}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 338704283}
+        m_MethodName: buyTimeSlow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2015767286
 MonoBehaviour:
   m_ObjectHideFlags: 0

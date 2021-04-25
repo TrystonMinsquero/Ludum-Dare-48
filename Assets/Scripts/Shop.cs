@@ -43,7 +43,7 @@ public class Shop : MonoBehaviour
     }
     private void Update()
     {
-        if(DataControl.suitLevel == 2)
+        if(DataControl.suitLevel >= 2)
         {
             suitMaxed.gameObject.SetActive(true);
             upgradeSuit.gameObject.SetActive(false);
@@ -62,7 +62,9 @@ public class Shop : MonoBehaviour
             DataControl.money -= suitCost;
             DataControl.suitLevel++;
 
-            suitCost = 10; 
+            suitCost = 10;
+
+            Debug.Log(DataControl.suitLevel + "\n" + DataControl.money);
         }
         else
         {
@@ -76,7 +78,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= bubbleCost;
             DataControl.bubbles++;
 
-            
+            Debug.Log(DataControl.bubbles+"\n"+DataControl.money);
         }
     }
     public void buyTimeSlow()
@@ -86,7 +88,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= timeSlowCost;
             DataControl.timeSlows++;
 
-            
+            Debug.Log(DataControl.timeSlows + "\n" + DataControl.money);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
