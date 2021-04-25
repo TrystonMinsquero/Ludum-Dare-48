@@ -28,7 +28,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static Tilemap[] tileMaps;
 
-    public static int distanceToPlace = 5;
+    public static int distanceToPlace = 8;
     public static int sectionsGenerated = 0;
 
     public static int transitionIndex = 0;
@@ -39,10 +39,7 @@ private void Awake()
             Destroy(this.gameObject);
         else
             instance = this;
-    }
 
-    void Start()
-    {
         obstacleMaps = new List<Texture2D[]>();
         obstacleTiles = new List<TileBase[]>();
         environmentTiles = new List<TileBase[]>();
@@ -52,7 +49,7 @@ private void Awake()
         tileMaps = tile_Maps;
 
 
-        for( int i = 0; i < numOfDifficulties; i++)
+        for (int i = 0; i < numOfDifficulties; i++)
         {
             obstacleMaps.Add(Resources.LoadAll<Texture2D>("Segments/Obstacles/Difficulty_" + i));
             //Debug.Log("Obstacle maps of diff " + i + " loaded " + obstacleMaps[i].Length + " maps");
@@ -70,7 +67,7 @@ private void Awake()
             obstacleTiles.Add(null);
             environmentTiles.Add(null);
         }
-        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM/2; i++)
+        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM / 2; i++)
         {
             transitionTiles.Add(null);
         }
@@ -109,10 +106,16 @@ private void Awake()
             LevelGenerator.InsertionSort(tiles);
         }
 
-            GenerateSegment(0);
+    }
+
+    void Start()
+    {
+        distanceToPlace += 8;
+        GenerateSegment(0);
         distanceToPlace += 10;
         GenerateSegment(0);
         distanceToPlace += 10;
+        distanceToPlace -= 11;
         sectionsGenerated--;
     }
 
@@ -132,6 +135,7 @@ private void Awake()
 
     public static void GenerateSegment(int difficulty)
     {
+        Debug.Log("Distance To Place = " + distanceToPlace);
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
@@ -195,6 +199,8 @@ private void Awake()
         pos.y -= distanceToPlace;
         pos.x += x;
         pos.y += y;
+        //if ((x == 0 || y == 0) && x == y )
+            //Debug.Log(Vector2.one * pos);
         Vector3Int gridPos = tileMap.WorldToCell(pos);
 
         if (pixelColor.a == 0)

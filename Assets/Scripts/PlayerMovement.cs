@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -106,6 +107,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private IEnumerator Flash(float duration, float stunInterval = .2f)
+    {
+        float timeUntilFlash = Time.time;
+        for (float i = duration; i >= 0; i -= Time.deltaTime)
+        {
+            gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
+            yield return null;
+        }
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+    }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -145,6 +157,8 @@ public class PlayerMovement : MonoBehaviour
             grounded = false;
 
             LevelManager.NextLevelSection();
+            LevelManager.walls.SetActive(true);
+            StartCoroutine(LevelManager.transitionToSong(LevelManager.themes[(int)LevelManager.levelSection]));
         }
 
 
