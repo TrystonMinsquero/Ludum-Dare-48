@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour
 
     public float levelSpeed = 5f;
     public float camTravelTime = 2f;
+    public float sectionDistance = 200f;
 
     static float CAM_TRAVEL_TIME;
 
@@ -20,6 +21,7 @@ public class LevelManager : MonoBehaviour
     public static Transform[] camPositions;
 
     public static float distanceTraveled;
+    public static bool transition;
 
     Rigidbody2D rb;
 
@@ -74,6 +76,12 @@ public class LevelManager : MonoBehaviour
 
 
         distanceTraveled = rb.position.y;
+
+        if(distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE)
+        {
+            transition = true;
+            NextLevelSection();
+        }
     }
 
     public static void ChangeLevelSection(LevelSection section)
@@ -103,6 +111,8 @@ public class LevelManager : MonoBehaviour
         CAM_POSITION = cameraPosition;
 
     }
+
+    
 
 }
 
