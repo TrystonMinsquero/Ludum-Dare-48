@@ -119,7 +119,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static void GenerateForeground(Texture2D segment)
     {
-        Debug.Log("Generating Obstacles from: " + segment.name);
+        //Debug.Log("Generating Obstacles from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -132,7 +132,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static void GenerateFeedTape(Texture2D segment)
     {
-        Debug.Log("Generating Foreground from: " + segment.name);
+        //Debug.Log("Generating Foreground from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -144,7 +144,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static void GenerateBackground(Texture2D segment)
     {
-        Debug.Log("Generating Background from: " + segment.name);
+        //Debug.Log("Generating Background from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -180,7 +180,7 @@ public class LevelGenerator : MonoBehaviour
         {
             //Add coins
             if(tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
-                Debug.LogError("Obstacle (" + x + ", " + y + ") = " + tileIndex);
+                Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
             else
                 tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
             Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
