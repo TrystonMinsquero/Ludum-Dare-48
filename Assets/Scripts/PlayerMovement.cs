@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 3f;
     public float drag = 1f;
+    public float scale = 1.5f;
 
 
     Controls controls;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
         bc = this.GetComponent<BoxCollider2D>();
 
         rb.drag = drag;
+        transform.localScale = Vector3.one * scale;
     }
 
     private void FixedUpdate()
@@ -59,9 +61,9 @@ public class PlayerMovement : MonoBehaviour
                 if (playerMovement.x != 0)
                 {
                     facingRight = playerMovement.x > 0 ? true : false;
-                    Vector3 scale = Vector3.one * 2;
-                    scale.x = facingRight ? 2 : -2;
-                    transform.localScale = scale;
+                    Vector3 scaleTemp = Vector3.one * scale;
+                    scaleTemp.x = facingRight ? scale : -scale;
+                    transform.localScale = scaleTemp;
                 }
             }
 
@@ -87,9 +89,9 @@ public class PlayerMovement : MonoBehaviour
 
                 //Check facing
                 facingRight = playerMovement.x > 0 ? true : false;
-                Vector3 scale = Vector3.one * 2;
-                scale.x = facingRight ? 2 : -2;
-                transform.localScale = scale;
+                Vector3 scaleTemp = Vector3.one * scale;
+                scaleTemp.x = facingRight ? scale : -scale;
+                transform.localScale = scaleTemp;
 
             }
 
