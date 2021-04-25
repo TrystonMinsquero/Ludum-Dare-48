@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     public static CameraPosition CAM_POSITION;
     public static Transform[] camPositions;
 
-    float distanceTraveled;
+    public static float distanceTraveled;
 
     Rigidbody2D rb;
 
@@ -72,7 +72,8 @@ public class LevelManager : MonoBehaviour
             rb.velocity = new Vector2(0, levelSpeed);
 
 
-        distanceTraveled += rb.velocity.y;
+
+        distanceTraveled = rb.position.y;
     }
 
     public static void ChangeLevelSection(LevelSection section)

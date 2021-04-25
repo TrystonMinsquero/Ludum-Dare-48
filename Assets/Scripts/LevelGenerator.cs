@@ -7,7 +7,8 @@ public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator instance;
 
-    public int numberOfDifficulties = 10;
+    public int maxDifficulty = 3;
+    public float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
 
@@ -24,6 +25,9 @@ public class LevelGenerator : MonoBehaviour
     public Tilemap[] tile_Maps;
 
     private static Tilemap[] tileMaps;
+
+    public static int distanceToPlace = 5;
+    public static int sectionsGenerated = 0;
 
     private void Awake()
     {
@@ -43,7 +47,7 @@ public class LevelGenerator : MonoBehaviour
         tileMaps = tile_Maps;
 
 
-        for( int i = 0; i < numberOfDifficulties; i++)
+        for( int i = 0; i <= maxDifficulty; i++)
         {
             obstacleMaps.Add(Resources.LoadAll<Texture2D>("Segments/Obstacles/Difficulty_" + i));
             //Debug.Log("Obstacle maps of diff " + i + " loaded " + obstacleMaps[i].Length + " maps");
@@ -59,10 +63,12 @@ public class LevelGenerator : MonoBehaviour
             obstacleTiles.Add(null);
             environmentTiles.Add(null);
         }
+        obstacleTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
         obstacleTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
         //obstacleTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Obstacles/Tiles");
         //obstacleTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Obstacles/Tiles");
 
+        environmentTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
         environmentTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
         //environmentTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Environment/Tiles");
         //environmentTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Environment/Tiles");
@@ -81,16 +87,34 @@ public class LevelGenerator : MonoBehaviour
             LevelGenerator.InsertionSort(tiles);
         }
 
-        GenerateSegment();
+        GenerateSegment(0);
+        distanceToPlace += 10;
+        GenerateSegment(0);
+        distanceToPlace += 10;
+        GenerateSegment(1);
     }
 
-    public static void GenerateSegment()
+    public void FixedUpdate()
+    {
+        Transform[] obstacles = obstacleFolder.GetComponentsInChildren<Transform>();
+        if(obstacles.Length == 0)
+            foreach(Transform obstacle in obstacles)
+                if (obstacle.position.y > LevelManager.cam.transform.position.y + LevelManager.camHeight)
+                    Destroy(obstacle.gameObject);
+        
+        if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0)
+        {
+            GenerateSegment((int)UnityEngine.Random.Range(0, maxDifficulty+1));
+        }
+    }
+
+    public static void GenerateSegment(int difficulty)
     {
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
-        int difficulty = 1;
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
-        GenerateForeground(obstacleMaps[difficulty][4]);
+        GenerateForeground(obstacleMaps[difficulty][(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)]);
+        sectionsGenerated++;
     }
 
     private static void GenerateForeground(Texture2D segment)
@@ -138,10 +162,10 @@ public class LevelGenerator : MonoBehaviour
         Tilemap tileMap = tileMaps[(int)tileMapType];
 
         Vector2 pos = tileMapType == TileMapType.FOREGROUND ? 
-            (Vector2)(LevelManager.cam.transform.position) - Vector2.up * 4.5f - Vector2.left * 8.5f
-            : (Vector2)(LevelManager.cam.transform.position) - Vector2.up * 4.5f - Vector2.left * 6.5f;
+            (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 5.5f
+            : (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 8.5f;
 
-        pos -= Vector2.down * 20;
+        pos.y -= distanceToPlace;
         pos.x += x;
         pos.y += y;
         Vector3Int gridPos = tileMap.WorldToCell(pos);
@@ -154,33 +178,20 @@ public class LevelGenerator : MonoBehaviour
 
         if (tileMapType == TileMapType.FOREGROUND)
         {
-            if(tileIndex > obstacleTiles[(int)LevelManager.levelSection + 1].Length)
+            //Add coins
+            if(tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
                 Debug.LogError("Obstacle (" + x + ", " + y + ") = " + tileIndex);
-            tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection+1][tileIndex]);
+            else
+                tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
             Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
         }
         else
         {
-            if (tileIndex > environmentTiles[(int)LevelManager.levelSection + 1].Length)
+            if (tileIndex > environmentTiles[(int)LevelManager.levelSection].Length)
                 Debug.LogError("Environment (" + x + ", " + y + ") = " + tileIndex);
-            tileMap.SetTile(gridPos, environmentTiles[(int)LevelManager.levelSection+1][tileIndex]);
+            tileMap.SetTile(gridPos, environmentTiles[(int)LevelManager.levelSection][tileIndex]);
         }
 
-        /*
-        foreach (ColorToPrefab colorMapping in colorMappings)
-        {
-            switch(tilemap)
-            {
-                case TileMapType.FEEDTAPE:
-                    if(colorMapping.color)
-            }
-            if(colorMapping.color.Equals(pixelColor))
-            {
-                Vector2 position = new Vector2(x, y);
-                Instantiate(colorMapping.prefab, position, Quaternion.identity,transform);
-            }
-        }
-        */
     }
 
     public enum TileMapType
