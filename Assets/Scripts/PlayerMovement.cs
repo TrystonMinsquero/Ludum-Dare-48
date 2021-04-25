@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 3f;
     public float drag = 1f;
     public float scale = 1.5f;
+    public float gravity = 2f;
 
 
     Controls controls;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         bc = this.GetComponent<BoxCollider2D>();
 
         rb.drag = drag;
+        rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
     }
 
@@ -76,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = gravity;
             if (playerMovement.x != 0)
             {
                 //Check movement
@@ -105,6 +107,9 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+
+        onLeftWall = false;
+        onRightWall = false;
     }
 
     private IEnumerator Flash(float duration, float stunInterval = .2f)
@@ -121,37 +126,57 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Ground")
+        foreach (ContactPoint2D contact in collision.contacts)
         {
-            Debug.Log(collision.transform.parent);
-            grounded = true;
-        }
+            //Debug.Log(contact.collider);
+            if (contact.collider.CompareTag("Ground"))
+            {
+                //Debug.Log("Ground!");
+                grounded = true;
+            }
 
-        if(collision.transform.tag == "Right Wall")
-        {
-            Debug.Log("Right Wall!");
-            onRightWall = true;
+            if (contact.collider.CompareTag("Right Wall"))
+            {
+                //Debug.Log("Right Wall!");
+                onRightWall = true;
+            }
+
+            if (contact.collider.CompareTag("Left Wall"))
+            {
+                //Debug.Log("Left Wall!");
+                onLeftWall = true;
+            }
+
+            if(contact.collider.CompareTag("Obstacle"))
+            {
+                Debug.Log("Die");
+            }
         }
         
-        if(collision.transform.tag == "Left Wall")
-        {
-            Debug.Log("Left Wall!");
-            onLeftWall = true;
-        }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Right Wall")
-            onRightWall = false;
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            
+            if (contact.collider.CompareTag("Right Wall"))
+            {
+                //Debug.Log("Right Wall!");
+                onRightWall = true;
+            }
 
-        if (collision.transform.tag == "Left Wall")
-            onLeftWall = false;
+            if (contact.collider.CompareTag("Left Wall"))
+            {
+                //Debug.Log("Left Wall!");
+                onLeftWall = true;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag == "Transition")
+        if(collision.transform.CompareTag("Transition"))
         {
             falling = true;
             grounded = false;

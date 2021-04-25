@@ -10,6 +10,7 @@ TagManager:
   - Right Wall
   - Transition
   - Ceiling
+  - Obstacle
   layers:
   - Default
   - TransparentFX

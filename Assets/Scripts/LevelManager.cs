@@ -132,6 +132,7 @@ public class LevelManager : MonoBehaviour
         {
             case LevelSection.CRUST:
                 ChangeCameraPosition(CameraPosition.GAME);
+                GameObject.Find("Temp Walls").SetActive(false);
                 break;
         }
     }
