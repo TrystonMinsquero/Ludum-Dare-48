@@ -6,8 +6,8 @@ using System;
 public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator instance;
+    public int numOfDifficulties = 4;
 
-    public int maxDifficulty = 3;
     public float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
@@ -52,7 +52,7 @@ private void Awake()
         tileMaps = tile_Maps;
 
 
-        for( int i = 0; i <= maxDifficulty; i++)
+        for( int i = 0; i < numOfDifficulties; i++)
         {
             obstacleMaps.Add(Resources.LoadAll<Texture2D>("Segments/Obstacles/Difficulty_" + i));
             //Debug.Log("Obstacle maps of diff " + i + " loaded " + obstacleMaps[i].Length + " maps");
@@ -63,7 +63,7 @@ private void Awake()
         backgroundMaps = Resources.LoadAll<Texture2D>("Segments/Background");
         //Debug.Log("Background maps loaded " + backgroundMaps.Length + " maps");
         transitionMaps = Resources.LoadAll<Texture2D>("Segments/Transitions");
-        Debug.Log("Transition maps loaded " + transitionMaps.Length + " maps");
+        //Debug.Log("Transition maps loaded " + transitionMaps.Length + " maps");
 
         for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM; i++)
         {
@@ -78,15 +78,15 @@ private void Awake()
         obstacleTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
         obstacleTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Obstacles/Tiles");
         obstacleTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Obstacles/Tiles");
-        //obstacleTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Obstacles/Tiles");
+        obstacleTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Obstacles/Tiles");
 
         environmentTiles[(int)LevelSection.GROUND] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
         environmentTiles[(int)LevelSection.CRUST] = Resources.LoadAll<TileBase>("TileMaps/Crust/Environment/Tiles");
         environmentTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Environment/Tiles");
-        //environmentTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Environment/Tiles");
+        environmentTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Environment/Tiles");
 
         transitionTiles[0] = Resources.LoadAll<TileBase>("TileMaps/Crust/Transition/Tiles");
-        //transitionTiles[1] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Transition/Tiles");
+        transitionTiles[1] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Transition/Tiles");
 
         foreach (TileBase[] tiles in obstacleTiles)
         {
@@ -126,7 +126,7 @@ private void Awake()
         
         if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0)
         {
-            GenerateSegment((int)UnityEngine.Random.Range(0, maxDifficulty+1));
+            GenerateSegment((int)UnityEngine.Random.Range(0, LevelManager.maxDifficulty + 1));
         }
     }
 
@@ -230,7 +230,8 @@ private void Awake()
             int sectionIndex = LevelManager.transition ? (int)LevelManager.levelSection - 1 : (int)LevelManager.levelSection;
             if (tileIndex > environmentTiles[sectionIndex].Length)
                 Debug.LogError("Environment (" + x + ", " + y + ") = " + tileIndex);
-            tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
+            else
+                tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
         }
 
     }
