@@ -21,9 +21,9 @@ public class Shop : MonoBehaviour
     public int timeSlowMaxP;
 
     public GameObject shopUI;
-    public Text suitMaxed;
+    public Image suitMaxed;
     public Button upgradeSuit;
-    public Text bubbleMaxed;
+    public Image bubbleMaxed;
 
     
 
