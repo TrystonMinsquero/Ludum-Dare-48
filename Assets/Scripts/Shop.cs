@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class Shop : MonoBehaviour
     public static int timeSlowMax;
     public int timeSlowMaxP;
 
+    public GameObject shopUI;
+    public Text suitMaxed;
+    public Button upgradeSuit;
+    public Text bubbleMaxed;
 
     
 
@@ -30,6 +35,17 @@ public class Shop : MonoBehaviour
         timeSlowCost = timeSlowCostP;
         timeSlowMax = timeSlowMaxP;
 
+        shopUI.SetActive(false);
+
+    }
+    private void Update()
+    {
+        if(DataControl.suitLevel == 2)
+        {
+            suitMaxed.gameObject.SetActive(true);
+            upgradeSuit.gameObject.SetActive(false);
+
+        }
     }
     public void buySuit()
     {
@@ -52,7 +68,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= bubbleCost;
             DataControl.bubbles++;
 
-            bubbleCost += 5;
+            
         }
     }
     public void buyTimeSlow()
@@ -62,15 +78,17 @@ public class Shop : MonoBehaviour
             DataControl.money -= timeSlowCost;
             DataControl.timeSlows++;
 
-            timeSlowCost += 5;
+            
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //if(Input.GetKey(KeyCode.Space)
-        //{
-        //      Bring up UI.
-        //}
+        if(collision.tag == "Player")
+        shopUI.SetActive(true);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        shopUI.SetActive(false);
     }
     private void Awake()
     {
