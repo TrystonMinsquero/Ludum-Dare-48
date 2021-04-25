@@ -72,8 +72,6 @@ public class LevelManager : MonoBehaviour
     {
 
         timeUntilSongPlay = (LevelGenerator.distanceToPlace - 10) / levelSpeed;
-        Debug.Log("distanceToPlace = " + LevelGenerator.distanceToPlace);
-        Debug.Log("timeUntilSongPlay = " + timeUntilSongPlay);
     }
 
     private Transform[] sortCamPositions(Transform[] positions)
@@ -165,15 +163,9 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
         if(currentSong != null)
-        {
             currentSong.volume = 0;
-            Debug.Log("Current Song Volume: " + currentSong.volume);
-        }
         if (song != null)
-        {
             song.volume = maxVolume;
-            Debug.Log("New Song Volume: " + song.volume);
-        }
 
         currentSong = song;
     }
