@@ -88,11 +88,14 @@ public class LevelGenerator : MonoBehaviour
     {
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
-        GenerateForeground(obstacleMaps[0][0]);
+        int difficulty = 1;
+        //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
+        GenerateForeground(obstacleMaps[difficulty][4]);
     }
 
     private static void GenerateForeground(Texture2D segment)
     {
+        Debug.Log("Generating Obstacles from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -105,6 +108,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static void GenerateFeedTape(Texture2D segment)
     {
+        Debug.Log("Generating Foreground from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -116,6 +120,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static void GenerateBackground(Texture2D segment)
     {
+        Debug.Log("Generating Background from: " + segment.name);
         for (int x = 0; x < segment.width; x++)
         {
             for (int y = 0; y < segment.height; y++)
@@ -127,11 +132,13 @@ public class LevelGenerator : MonoBehaviour
 
     public static void GenerateTile(Texture2D map, int x, int y, TileMapType tileMapType)
     {
+        
+
         Color pixelColor = map.GetPixel(x, y);
         Tilemap tileMap = tileMaps[(int)tileMapType];
 
         Vector2 pos = tileMapType == TileMapType.FOREGROUND ? 
-            (Vector2)(LevelManager.cam.transform.position) - Vector2.up * 4.5f - Vector2.left * 5.5f
+            (Vector2)(LevelManager.cam.transform.position) - Vector2.up * 4.5f - Vector2.left * 8.5f
             : (Vector2)(LevelManager.cam.transform.position) - Vector2.up * 4.5f - Vector2.left * 6.5f;
 
         pos -= Vector2.down * 20;
@@ -145,17 +152,17 @@ public class LevelGenerator : MonoBehaviour
         ColorUtility.ToHtmlStringRGB(pixelColor);
         int tileIndex = int.Parse(ColorUtility.ToHtmlStringRGB(pixelColor), System.Globalization.NumberStyles.HexNumber);
 
-
-        if(tileMapType == TileMapType.FOREGROUND)
+        if (tileMapType == TileMapType.FOREGROUND)
         {
-
-            Debug.Log("Obstacle (" + x + ", " + y + ") = " + tileIndex);
+            if(tileIndex > obstacleTiles[(int)LevelManager.levelSection + 1].Length)
+                Debug.LogError("Obstacle (" + x + ", " + y + ") = " + tileIndex);
             tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection+1][tileIndex]);
             Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
         }
         else
         {
-            Debug.Log("Environment (" + x + ", " + y + ") = " + tileIndex);
+            if (tileIndex > environmentTiles[(int)LevelManager.levelSection + 1].Length)
+                Debug.LogError("Environment (" + x + ", " + y + ") = " + tileIndex);
             tileMap.SetTile(gridPos, environmentTiles[(int)LevelManager.levelSection+1][tileIndex]);
         }
 
