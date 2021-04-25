@@ -21,9 +21,12 @@ public class Shop : MonoBehaviour
     public int timeSlowMaxP;
 
     public GameObject shopUI;
+
     public Image suitMaxed;
     public Button upgradeSuit;
+
     public Image bubbleMaxed;
+    public Button upgradeBubble;
 
     
 
@@ -45,6 +48,11 @@ public class Shop : MonoBehaviour
             suitMaxed.gameObject.SetActive(true);
             upgradeSuit.gameObject.SetActive(false);
 
+        }
+        if(DataControl.bubbles >= bubbleMax)
+        {
+            bubbleMaxed.gameObject.SetActive(true);
+            upgradeBubble.gameObject.SetActive(false);
         }
     }
     public void buySuit()
