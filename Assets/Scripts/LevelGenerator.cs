@@ -67,14 +67,27 @@ public class LevelGenerator : MonoBehaviour
         //environmentTiles[(int)LevelSection.MANTLE] = Resources.LoadAll<TileBase>("TileMaps/Mantle/Environment/Tiles");
         //environmentTiles[(int)LevelSection.CORE] = Resources.LoadAll<TileBase>("TileMaps/Core/Environment/Tiles");
 
+        foreach(TileBase[] tiles in obstacleTiles)
+        {
+            if (tiles == null)
+                continue;
+            LevelGenerator.InsertionSort(tiles);
+        }
+
+        foreach (TileBase[] tiles in environmentTiles)
+        {
+            if (tiles == null)
+                continue;
+            LevelGenerator.InsertionSort(tiles);
+        }
+
         GenerateSegment();
-        //GenerateLevel();
     }
 
     public static void GenerateSegment()
     {
-        GenerateBackground(backgroundMaps[0]);
-        GenerateFeedTape(foregroundMaps[0]);
+        GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
+        GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         GenerateForeground(obstacleMaps[0][0]);
     }
 
@@ -131,16 +144,18 @@ public class LevelGenerator : MonoBehaviour
 
         ColorUtility.ToHtmlStringRGB(pixelColor);
         int tileIndex = int.Parse(ColorUtility.ToHtmlStringRGB(pixelColor), System.Globalization.NumberStyles.HexNumber);
-        Debug.Log("(" + x + ", " + y + ") = " + tileIndex);
 
 
         if(tileMapType == TileMapType.FOREGROUND)
         {
-            tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
+
+            Debug.Log("Obstacle (" + x + ", " + y + ") = " + tileIndex);
+            tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection+1][tileIndex]);
             Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
         }
         else
         {
+            Debug.Log("Environment (" + x + ", " + y + ") = " + tileIndex);
             tileMap.SetTile(gridPos, environmentTiles[(int)LevelManager.levelSection+1][tileIndex]);
         }
 
@@ -167,7 +182,26 @@ public class LevelGenerator : MonoBehaviour
         FEEDTAPE,
         BACKGROUND
     }
+
+    public static void InsertionSort(TileBase[] input)
+    {
+
+        for (int i = 0; i < input.Length; i++)
+        {
+            var item = input[i];
+            var currentIndex = i;
+            while (currentIndex > 0 && 
+                int.Parse(input[currentIndex - 1].name.Substring(input[currentIndex - 1].name.IndexOf("_") + 1)) > int.Parse(item.name.Substring(item.name.IndexOf("_") + 1)))
+            {
+                input[currentIndex] = input[currentIndex - 1];
+                currentIndex--;
+            }
+
+            input[currentIndex] = item;
+        }
+    }
 }
+
 
 
 
