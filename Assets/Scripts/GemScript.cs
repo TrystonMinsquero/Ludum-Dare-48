@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GemScript : MonoBehaviour
 {
-    private static bool rareGem;
-    private int gemValue;
+    bool rareGem;
+    int gemValue;
 
     private static GameObject Gem;
     public GameObject GemP;
@@ -27,22 +27,32 @@ public class GemScript : MonoBehaviour
     public Color commonCoreColor;
     public Color rareCoreColor;
 
-    public static void createGem(Vector2 position, bool r)
+    SpriteRenderer sr;
+
+    public static void createGem(Vector2 position, bool r, Transform parent)
     {
-        rareGem = r;
-        Instantiate(Gem, position, Quaternion.identity);
+        GameObject gem = Instantiate(Gem, parent);
+        gem.GetComponent<GemScript>().rareGem = r;
+        gem.transform.position = position;
+        gem.GetComponent<GemScript>().SetColor();
+        gem.GetComponent<GemScript>().SetValue();
+
     }
     public void Start()
     {
         Gem = GemP;
-        SpriteRenderer sr = Gem.GetComponent<SpriteRenderer>();
-        
+        sr = this.GetComponent<SpriteRenderer>();
 
-        switch(LevelManager.levelSection)
+
+    }   
+
+    public void SetColor()
+    {
+        switch (LevelManager.levelSection)
         {
             case LevelSection.GROUND:
             case LevelSection.CRUST:
-                gemColor = rareGem ? rareCrustColor : commonCrustColor;   
+                gemColor = rareGem ? rareCrustColor : commonCrustColor;
                 break;
 
             case LevelSection.MANTLE:
@@ -54,11 +64,11 @@ public class GemScript : MonoBehaviour
                 break;
         }
         sr.color = gemColor;
+        
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    public void SetValue()
     {
-        Destroy(gameObject);
-        //add valueOfGem to players $$$
         switch (LevelManager.levelSection)
         {
             case LevelSection.GROUND:
@@ -73,7 +83,14 @@ public class GemScript : MonoBehaviour
             case LevelSection.CORE:
                 gemValue = rareGem ? rareCore : commonCore;
                 break;
-        }  
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Destroy(gameObject);
+        //add valueOfGem to players $$$
+        
         DataControl.money += gemValue; 
     }
   

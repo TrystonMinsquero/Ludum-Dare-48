@@ -8,9 +8,10 @@ public class LevelGenerator : MonoBehaviour
     public static LevelGenerator instance;
     public int numOfDifficulties = 4;
 
-    public float rareChance = .2f;
+    public static float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
+    public GameObject GemP;
     public Transform[] environmentPoints = new Transform[2];
     public Transform[] obstaclePoints = new Transform[2];
     public Transform[] beginningPoints = new Transform[2];
@@ -21,6 +22,7 @@ public class LevelGenerator : MonoBehaviour
 
     private static GameObject obstacleFolder;
     private static GameObject obstaclePrefab;
+    private static GameObject gemPrefab;
 
     public static List<Texture2D[]> obstacleMaps;
     public static Texture2D[] foregroundMaps;
@@ -53,6 +55,7 @@ private void Awake()
         transitionTiles = new List<TileBase[]>();
         obstacleFolder = obstacle_Folder;
         obstaclePrefab = obstacle_Prefab;
+        gemPrefab = GemP;
         tileMaps = tile_Maps;
 
 
@@ -230,15 +233,24 @@ private void Awake()
 
         if (tileMapType == TileMapType.FOREGROUND)
         {
-            //Add coins
-
+            
             if (!LevelManager.transition)
             {
-                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
+                //coins have a decimal of 10879231
+                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length && tileIndex != 10879231)
                     Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
                 else
-                    tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
-                Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+                {
+                    if (tileIndex == 10879231)
+                        GemScript.createGem(pos, (UnityEngine.Random.Range(0, 100) < rareChance * 100), obstacleFolder.transform);
+                    else
+                    {
+                        tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
+                        Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+                    }
+                }
+                    
+                    
             }
             else
             {
