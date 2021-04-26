@@ -17008,6 +17008,9 @@ MonoBehaviour:
   drag: 4
   scale: 1
   gravity: 2
+  upRotation: 80
+  downHorizontalRotation: 25
+  horizontalRotaion: 35
 --- !u!212 &1002174642
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17066,9 +17069,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002174638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.72, y: -0.2, z: 0}
+  m_LocalPosition: {x: 7.02, y: -0.2, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
-  m_Children: []
+  m_Children:
+  - {fileID: 2091046630}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -20483,12 +20487,12 @@ GameObject:
   - component: {fileID: 2091046629}
   - component: {fileID: 2091046628}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &2091046628
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -20527,8 +20531,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -768668609
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 1
@@ -20689,7 +20693,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -20743,7 +20747,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0.6084906, b: 0.94653004, a: 0.34901962}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -21180,7 +21184,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 5
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -21816,7 +21820,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -21824,8 +21828,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+        key1: {r: 1, g: 1, b: 1, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -25218,12 +25222,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091046627}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.563285, y: 0.15941675, z: -164.77371}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_Father: {fileID: 1002174643}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1001 &2134183076
 PrefabInstance:
