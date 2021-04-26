@@ -106,7 +106,9 @@ public class LevelManager : MonoBehaviour
 
 
 
-        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
+        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || 
+            distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE || 
+            distanceTraveled >= sectionDistance * 3 && levelSection < LevelSection.BOTTOM)
         {
             transition = true;
             maxDifficulty++;
@@ -125,10 +127,13 @@ public class LevelManager : MonoBehaviour
                 ChangeCameraPosition(CameraPosition.GAME);
                 GameObject.Find("Temp Walls").SetActive(false);
                 break;
+            case LevelSection.BOTTOM:
+                break;
+
         }
 
         
-        if ((int)levelSection > DataControl.suitLevel + 1)
+        if ((int)levelSection > DataControl.suitLevel + 1 && levelSection != LevelSection.BOTTOM)
             player.GetComponent<Player>().StartBurnout();
     }
 
