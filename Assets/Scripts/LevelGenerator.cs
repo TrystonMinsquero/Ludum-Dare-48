@@ -116,7 +116,11 @@ private void Awake()
             LevelGenerator.InsertionSort(tiles);
         }
 
-    }
+        distanceToPlace = 8;
+        sectionsGenerated = 0;
+        transitionIndex = 0;
+
+}
 
     void Start()
     {

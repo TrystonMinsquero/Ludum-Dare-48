@@ -57,6 +57,11 @@ public class SoundManager : MonoBehaviour
             Destroy(this);
         else
             instance = this;
+        if (currentSong != null)
+        {
+            currentSong.Stop();
+            currentSong = null;
+        }
     }
 
     private void Start()
@@ -171,7 +176,6 @@ public class SoundManager : MonoBehaviour
         currentSong = sound;
         while (currentSong.isPlaying)
             yield return null;
-        LevelManager.readyToDie = true;
     }
 
     //Add Method to play each sound here

@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     bool falling;
     bool onRightWall;
     bool onLeftWall;
-    bool splat;
+    [System.NonSerialized]
+    public bool splat;
 
     // Start is called before the first frame update
     void Start()
@@ -92,10 +93,9 @@ public class PlayerMovement : MonoBehaviour
             if (transform.position.y < minPlayerHeight)
                 transform.position = new Vector2(transform.position.x, minPlayerHeight);
 
-            if (splat && transform.position.y > maxPlayerHeight + 3)
+            if (splat && transform.position.y > maxPlayerHeight)
             {
-                Debug.Log("Die");
-                StartCoroutine(player.Die());
+                player.isDying = true;
             }
 
         }
@@ -237,15 +237,6 @@ public class PlayerMovement : MonoBehaviour
 
     
 
-    public void Splat()
-    {
-
-        controls.Disable();
-        splat = true;
-        SoundManager.playSound(SoundManager.splat);
-        StartCoroutine(player.DieAfterTime(1));
-        
-    }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -276,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
                 if (player.hasBubble)
                     player.PopBubble();
                 else
-                    Splat();
+                    player.Splat();
             }
 
         }

@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     {
         StartCoroutine(SoundManager.playDeath());
         yield return new WaitForSeconds(time);
-        while (!LevelManager.readyToDie)
+        while (!isDying)
             yield return null;
         LevelManager.ResetScene();
     }
@@ -50,14 +50,13 @@ public class Player : MonoBehaviour
     public IEnumerator Die()
     {
         StartCoroutine(SoundManager.TransitionToSong(null));
-        isDying = true;
         SoundManager.playSound(SoundManager.death);
         Debug.Log("Waiting for music to finish");
-        while (!LevelManager.readyToDie)
+        while (!isDying)
             yield return null;
 
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        LevelManager.ResetScene();
     }
 
     public void CheckSuitLevel()
@@ -123,6 +122,16 @@ public class Player : MonoBehaviour
         sr.enabled = true;
         bc.enabled = true;
         hasBubble = false;
+
+    }
+
+    public void Splat()
+    {
+        PlayerMovement player = this.gameObject.GetComponent<PlayerMovement>();
+        SoundManager.playSound(SoundManager.splat);
+        player.splat = true;
+        player.controls.Disable();
+        StartCoroutine(Die());
 
     }
 }

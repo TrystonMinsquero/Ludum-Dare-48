@@ -14,25 +14,24 @@ public class LevelManager : MonoBehaviour
 
     private static float camTravelTime;
 
-    public static LevelSection levelSection = LevelSection.GROUND;
+    public static LevelSection levelSection;
     public static GameObject cam;
     public static int camWidth = 10;
     public static int camHeight = 16;
     public static GameObject walls;
 
     public GameObject cameraPositions;
-    public CameraPosition camPosition = CameraPosition.INITIAL;
+    public CameraPosition camPosition;
     public static CameraPosition CAM_POSITION;
     public static Transform[] camPositions;
 
     public static float distanceTraveled;
     public static bool transition;
-    public static int maxDifficulty = 1;
+    public static int maxDifficulty;
     public static float levelSpeed;
 
     public static bool falling;
     public static bool timeSlowed;
-    public static bool readyToDie;
 
     Rigidbody2D rb;
 
@@ -52,7 +51,11 @@ public class LevelManager : MonoBehaviour
         walls = GameObject.Find("Walls");
         walls.SetActive(false);
         camPositions = sortCamPositions(cameraPositions.GetComponentsInChildren<Transform>());
-
+        levelSection = LevelSection.GROUND;
+        camPosition = CameraPosition.INITIAL;
+        maxDifficulty = 1;
+        falling = false;
+        transition = false;
 
 
         rb = this.GetComponent<Rigidbody2D>();
@@ -66,7 +69,8 @@ public class LevelManager : MonoBehaviour
 
     public void Start()
     {
-
+        
+        distanceTraveled = 0;
     }
 
     private Transform[] sortCamPositions(Transform[] positions)
