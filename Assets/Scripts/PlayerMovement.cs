@@ -17,13 +17,15 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     BoxCollider2D bc;
     Animator anim;
-
+    ParticleSystem smoke;
+    SpriteRenderer sr;
 
     bool facingRight;
     bool grounded = true;
     bool falling;
     bool onRightWall;
     bool onLeftWall;
+    bool splat;
 
     // Start is called before the first frame update
     void Start()
@@ -33,10 +35,13 @@ public class PlayerMovement : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
+        smoke = this.GetComponentInChildren<ParticleSystem>();
+        sr = this.GetComponent<SpriteRenderer>();
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
+        smoke.Stop();
     }
 
     private void FixedUpdate()
@@ -118,7 +123,10 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
+        smoke.gameObject.transform.rotation = Quaternion.Euler(-90, 0, 0);
         CheckAnimation(playerMovement);
+
+
 
         onLeftWall = false;
         onRightWall = false;
@@ -126,6 +134,24 @@ public class PlayerMovement : MonoBehaviour
 
     public void CheckAnimation(Vector2 playerMovement)
     {
+        int suitNum = -1;
+        switch (DataControl.suitLevel)
+        {
+            case 0: suitNum = 2;break;
+            case 1: suitNum = 0;break;
+            case 2: suitNum = 1;break;
+        }
+        if (suitNum < 0)
+            Debug.LogError("Suit level not 0, 1, or 2");
+
+        if (splat)
+        {
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? -scale : scale;
+            transform.localScale = scaleTemp;
+            anim.Play("Travis Splat_" + suitNum);
+            return;
+        }
 
         string state = "Travis ";
         if (falling)
@@ -169,23 +195,75 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if (rotateValue < 0)
-                Debug.Log("You fucked up");
+                Debug.Log("You messed up");
 
             rotateValue *= facingRight ? 1 : -1;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateValue));
             
         }
+        else
+        {
+            //Check scalling
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? scale : -scale;
+            transform.localScale = scaleTemp;
 
+            if (!grounded)
+            {
+                state += "Jump";
+            }
+            else if(playerMovement.x != 0)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("Travis Walk_" + suitNum))
+                    return;
+                state += "Walk";
+            }
+            else
+            {
+                state += "Idle";
+            }
 
-        state += "_" + DataControl.suitLevel;
+        }
+
+        state += "_" + suitNum;
 
         anim.Play(state);
+    }
+
+    public IEnumerator Burnout(float fadeoutDuration = 3.5f, float timeUntilFade = 3f)
+    {
+        Debug.Log("Start smoke");
+        smoke.Play();
+        for (float i = timeUntilFade; i >= 0; i -= Time.deltaTime)
+            yield return null;
+
+        Debug.Log("Start fade");
+        controls.Disable();
+        for (float i = fadeoutDuration; i >= 0; i -= Time.deltaTime)
+        {
+            Color newAlpha = sr.color;
+            newAlpha.a -= Time.deltaTime / fadeoutDuration;
+            sr.color = newAlpha;
+            yield return null;
+        }
+        Debug.Log("Start Final words");
+
+        smoke.Stop();
+        while (smoke.IsAlive())
+            yield return null;
+        Die();
+
+    }
+
+    public void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     private IEnumerator Flash(float duration, float stunInterval = .2f)
     {
         float timeUntilFlash = Time.time;
-        for (float i = duration; i >= 0; i -= Time.deltaTime)
+        for (float i = duration; i >= 0; i -= Time.fixedDeltaTime)
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
             yield return null;

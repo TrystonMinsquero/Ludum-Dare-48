@@ -10,7 +10,7 @@ public class GemDisplay : MonoBehaviour
 
     void Update()
     {
-        numOfGems.text = DataControl.money.ToString();
-        numOfCharges.text = DataControl.timeSlows.ToString();
+        numOfGems.text = "x"+DataControl.money.ToString();
+        numOfCharges.text = "x" + DataControl.timeSlows.ToString();
     }
 }

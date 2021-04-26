@@ -77,6 +77,10 @@ public class Shop : MonoBehaviour
             //play uh-oh noise (can't buy)
         }
     }
+    public void hoverSuit()
+    {
+        Debug.Log("HOVERING SUIT!!");
+    }
     public void buyBubble()
     {
         if(DataControl.money >= bubbleCost && DataControl.bubbles < bubbleMax)
@@ -87,6 +91,10 @@ public class Shop : MonoBehaviour
             Debug.Log(DataControl.bubbles+"\n"+DataControl.money);
         }
     }
+    public void hoverBubble()
+    {
+        Debug.Log("HOVERING BUBBLE!!");
+    }
     public void buyTimeSlow()
     {
         if(DataControl.money >= timeSlowCost && DataControl.timeSlows < timeSlowMax)
@@ -96,6 +104,10 @@ public class Shop : MonoBehaviour
 
             Debug.Log(DataControl.timeSlows + "\n" + DataControl.money);
         }
+    }
+    public void hoverTimeSlow()
+    {
+        Debug.Log("HOVERING TIME CHARGE!!");
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
