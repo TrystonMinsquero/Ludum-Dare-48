@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using UnityEngine.Experimental.Rendering.Universal;
 public class GemScript : MonoBehaviour
 {
     bool rareGem;
@@ -21,6 +21,8 @@ public class GemScript : MonoBehaviour
     public Color rareMantleColor;
     public Color commonCoreColor;
     public Color rareCoreColor;
+
+    public Light2D glow;
 
     SpriteRenderer sr;
 
@@ -52,6 +54,7 @@ public class GemScript : MonoBehaviour
                 break;
         }
         this.GetComponent<SpriteRenderer>().color = gemColor;
+        glow.color = gemColor;
         
     }
 
