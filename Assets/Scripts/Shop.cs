@@ -52,6 +52,8 @@ public class Shop : MonoBehaviour
 
         shopUI.SetActive(false);
 
+        
+
     }
     private void Update()
     {
@@ -146,6 +148,10 @@ public class Shop : MonoBehaviour
         if (collision.tag == "Player")
         {
             shopUI.SetActive(true);
+            defaultText.gameObject.SetActive(true);
+            hoverSuitText.gameObject.SetActive(false);
+            hoverBubbleText.gameObject.SetActive(false);
+            hoverTimeSlowText.gameObject.SetActive(false);
             LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
         }
     }
