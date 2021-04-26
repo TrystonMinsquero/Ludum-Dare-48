@@ -77,7 +77,7 @@ public class Shop : MonoBehaviour
 
             LevelManager.player.GetComponent<Player>().GiveBubble();
 
-            //upgradeBubble.gameObject.SetActive(false);
+            upgradeBubble.gameObject.SetActive(false);
             Debug.Log(DataControl.bubbles + "\n" + DataControl.money);
         }
         else
