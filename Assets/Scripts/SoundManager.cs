@@ -131,12 +131,10 @@ public class SoundManager : MonoBehaviour
 
     //Add Method to play each sound here
 
-    /* for audiosource, need to make each one static
-    public static void playsound()
+    public static void playSound(AudioSource sound)
     {
-        sound.play();
+        sound.Play();
     }
-    */
 
     
 
