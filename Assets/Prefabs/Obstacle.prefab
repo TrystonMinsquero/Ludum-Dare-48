@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 47774978946928738}
   m_Layer: 0
   m_Name: Right Wall
-  m_TagString: Obstacle
+  m_TagString: Right Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4052265687745443713}
   m_Layer: 0
   m_Name: Left Wall
-  m_TagString: Obstacle
+  m_TagString: Left Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4219336651154053986}
   - component: {fileID: 8218635835547261400}
   - component: {fileID: 4301050523734265084}
+  - component: {fileID: 6333350418340531481}
   m_Layer: 0
   m_Name: Gem Prefab
   m_TagString: Untagged
@@ -72,7 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 1575175849
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4647b376173e4b64fb54c102df228186, type: 3}
+  m_Sprite: {fileID: -4080278737599844964, guid: 16c875568947e594e92c95a245b19c84,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -133,3 +135,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.8363887}
   m_EdgeRadius: 0
+--- !u!95 &6333350418340531481
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031568402141275410}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 80bee753fd85f0f44a9306f8502e5879, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

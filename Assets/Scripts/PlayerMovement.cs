@@ -12,13 +12,14 @@ public class PlayerMovement : MonoBehaviour
     public float downHorizontalRotation = 25;
     public float horizontalRotaion = 35;
 
-
+    Player player;
     Controls controls;
     Rigidbody2D rb;
     BoxCollider2D bc;
     Animator anim;
     ParticleSystem smoke;
     SpriteRenderer sr;
+    SpriteRenderer bubble;
 
     bool facingRight;
     bool grounded = true;
@@ -26,22 +27,28 @@ public class PlayerMovement : MonoBehaviour
     bool onRightWall;
     bool onLeftWall;
     bool splat;
+    bool hasBubble;
 
     // Start is called before the first frame update
     void Start()
     {
         controls = new Controls();
         controls.Enable();
+        player = this.GetComponent<Player>();
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
-        smoke = this.GetComponentInChildren<ParticleSystem>();
         sr = this.GetComponent<SpriteRenderer>();
+        smoke = this.GetComponentInChildren<ParticleSystem>();
+        foreach (SpriteRenderer renderer in this.GetComponentsInChildren<SpriteRenderer>())
+            if (renderer != sr)
+                bubble = renderer;
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
         smoke.Stop();
+        bubble.enabled = false;
     }
 
     private void FixedUpdate()
@@ -52,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         if (falling)
         {
             rb.gravityScale = 0;
+
             float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + bc.size.y / 2;
             float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - bc.size.y / 2;
             //Directional movement
@@ -84,11 +92,11 @@ public class PlayerMovement : MonoBehaviour
             if(!LevelManager.timeSlowed && controls.Gameplay.SlowTime.ReadValue<float>() > 0 && DataControl.timeSlows > 0)
             {
                 DataControl.timeSlows--;
-                StartCoroutine(LevelManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
+                StartCoroutine(SoundManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
             }
                 
 
-            if (transform.position.y > maxPlayerHeight)
+            if (transform.position.y > maxPlayerHeight && !splat)
                 transform.position = new Vector2(transform.position.x, maxPlayerHeight);
 
             if (transform.position.y < minPlayerHeight)
@@ -251,24 +259,43 @@ public class PlayerMovement : MonoBehaviour
         smoke.Stop();
         while (smoke.IsAlive())
             yield return null;
-        Die();
+        player.Die();
 
     }
 
-    public void Die()
+    public void Splat()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
+        controls.Disable();
+        splat = true;
+        StartCoroutine(player.DieAfterTime(4));
+        
     }
 
-    private IEnumerator Flash(float duration, float stunInterval = .2f)
+    public void GiveBubble()
     {
-        float timeUntilFlash = Time.time;
+        hasBubble = true;
+        bubble.enabled = true;
+    }
+
+    public void PopBubble()
+    {
+        bubble.enabled = false;
+        StartCoroutine(Flash(1.5f));
+    }
+
+
+    private IEnumerator Flash(float duration)
+    {
+
         for (float i = duration; i >= 0; i -= Time.fixedDeltaTime)
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
             yield return null;
         }
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        hasBubble = false;
+        
     }
 
 
@@ -297,8 +324,12 @@ public class PlayerMovement : MonoBehaviour
 
             if(contact.collider.CompareTag("Obstacle"))
             {
-                Debug.Log("Die");
+                if (hasBubble)
+                    PopBubble();
+                else
+                    Splat();
             }
+
         }
         
     }
@@ -332,9 +363,10 @@ public class PlayerMovement : MonoBehaviour
             LevelManager.NextLevelSection();
             LevelManager.walls.SetActive(true);
             LevelManager.falling = true;
-            StartCoroutine(LevelManager.transitionToSong(LevelManager.themes[(int)LevelManager.levelSection]));
+            StartCoroutine(SoundManager.TransitionToSong(SoundManager.themes[(int)LevelManager.levelSection]));
         }
 
 
     }
+
 }

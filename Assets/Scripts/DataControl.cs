@@ -9,8 +9,8 @@ public class DataControl : MonoBehaviour
     public static int money;
     public int moneyP;
 
-    public static int bubbles;
-    public int bubblesP;
+    public static bool bubbles;
+    public bool bubblesP;
 
     public static int timeSlows;
     public int timeSlowsP;
