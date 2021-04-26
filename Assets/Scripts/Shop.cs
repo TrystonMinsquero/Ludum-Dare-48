@@ -48,7 +48,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= DataControl.suitCost;
             DataControl.suitLevel++;
 
-            DataControl.suitCost = 10;
+            DataControl.suitCost = 100;
 
             Debug.Log(DataControl.suitLevel + "\n" + DataControl.money);
         }

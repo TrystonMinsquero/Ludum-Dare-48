@@ -19748,12 +19748,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ccaf129a02c1c34a86fae89698f18e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyP: 45
+  moneyP: 0
   bubblesP: 0
   timeSlowsP: 0
   suitLevelP: 0
-  suitCostP: 45
-  bubbleCostP: 0
+  suitCostP: 30
+  bubbleCostP: 10
   bubbleMaxP: 1
   timeSlowCostP: 7
   timeSlowMaxP: 99
