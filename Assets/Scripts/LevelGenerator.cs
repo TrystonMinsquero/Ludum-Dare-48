@@ -328,7 +328,7 @@ private void Awake()
         pos.y -= creditsPlaceDistance;
         Instantiate(creditsPrefab, obstacleFolder.transform).transform.position = pos;
         RectTransform canvas = GameObject.Find("Credits(Clone)").GetComponent<RectTransform>();
-        pos.y -= canvas.rect.height * canvas.localScale.y / 2;
+        pos.y += (canvas.rect.height * canvas.localScale.y) / 2 + 5;
         Instantiate(transitionColliderPrefab, obstacleFolder.transform).transform.position = pos;
 
     }

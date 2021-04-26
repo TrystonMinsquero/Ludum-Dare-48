@@ -137,10 +137,11 @@ public class LevelManager : MonoBehaviour
                 break;
             case LevelSection.VICTORY:
                 GameObject.Find("End Canvas").GetComponent<Canvas>().enabled = true;
+                levelSpeed = levelSpeed / 2;
                 break;
         }
 
-        if ((int)levelSection > DataControl.suitLevel + 1 && levelSection >= LevelSection.VOID)
+        if (levelSection < LevelSection.VOID && (int)levelSection > DataControl.suitLevel + 1)
             player.GetComponent<Player>().StartBurnout();
     }
 
