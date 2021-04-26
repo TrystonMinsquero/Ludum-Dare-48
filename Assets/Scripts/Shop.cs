@@ -27,17 +27,17 @@ public class Shop : MonoBehaviour
 
     public GameObject shopUI;
 
-    public Text defaultText;
+    public Text speechBubble;
 
     public Image suitMaxed;
     public Button upgradeSuit;
-    public Text hoverSuitText;
+   
 
     public Image bubbleMaxed;
     public Button upgradeBubble;
-    public Text hoverBubbleText;
+    
 
-    public Text hoverTimeSlowText;
+   
 
 
     void Start()
@@ -89,14 +89,11 @@ public class Shop : MonoBehaviour
     public void hoverSuit()
     {
         SoundManager.playSound(SoundManager.hoverItem);
-        defaultText.gameObject.SetActive(false);
-        hoverSuitText.gameObject.SetActive(true);
+        speechBubble.text = "Upgrade your suit to help you survive deeper depths!";
         Debug.Log("HOVERING SUIT!!");
     }
     public void unhoverSuit()
     {
-        defaultText.gameObject.SetActive(true);
-        hoverSuitText.gameObject.SetActive(false);
         Debug.Log("UNHOVERING SUIT!!");
     }
     public void buyBubble()
@@ -115,14 +112,11 @@ public class Shop : MonoBehaviour
     public void hoverBubble()
     {
         SoundManager.playSound(SoundManager.hoverItem);
-        defaultText.gameObject.SetActive(false);
-        hoverBubbleText.gameObject.SetActive(true);
+        speechBubble.text = "A bubble might help with obstacles!";
         Debug.Log("HOVERING BUBBLE!!");
     }
     public void unhoverBubble()
     {
-        defaultText.gameObject.SetActive(true);
-        hoverBubbleText.gameObject.SetActive(false);
         Debug.Log("UNHOVERING BUBBLE!!");
     }
     public void buyTimeSlow()
@@ -139,14 +133,11 @@ public class Shop : MonoBehaviour
     public void hoverTimeSlow()
     {
         SoundManager.playSound(SoundManager.hoverItem);
-        defaultText.gameObject.SetActive(false);
-        hoverTimeSlowText.gameObject.SetActive(true);
+        speechBubble.text = "Slow down the infinitely expanding dimmension of time...for only " + timeSlowCost + " Gems!";
         Debug.Log("HOVERING TIME CHARGE!!");
     }
     public void unhoverTimeSlow()
     {
-        defaultText.gameObject.SetActive(true);
-        hoverTimeSlowText.gameObject.SetActive(false);
         Debug.Log("UNHOVERING TIME CHARGE!!");
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -154,10 +145,6 @@ public class Shop : MonoBehaviour
         if (collision.tag == "Player")
         {
             shopUI.SetActive(true);
-            defaultText.gameObject.SetActive(true);
-            hoverSuitText.gameObject.SetActive(false);
-            hoverBubbleText.gameObject.SetActive(false);
-            hoverTimeSlowText.gameObject.SetActive(false);
             LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
         }
     }
