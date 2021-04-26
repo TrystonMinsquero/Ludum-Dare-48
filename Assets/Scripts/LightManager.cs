@@ -19,6 +19,10 @@ public class LightManager : MonoBehaviour
 
     void Update()
     {
+        headLight.intensity = LevelManager.distanceTraveled < LevelManager.sectionDistance * 3 ?
+            (LevelManager.sectionDistance * 3 - LevelManager.distanceTraveled) / (LevelManager.sectionDistance * 3) : 
+            0;
+        /*
         switch(LevelManager.levelSection)
         {
             case LevelSection.GROUND:
@@ -34,7 +38,7 @@ public class LightManager : MonoBehaviour
             case LevelSection.VOID:
                 headLight.intensity = voidLight;
                 break;
-        }
+        }*/
         
         }
 }
