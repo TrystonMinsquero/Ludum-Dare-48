@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
             if(!LevelManager.timeSlowed && controls.Gameplay.SlowTime.ReadValue<float>() > 0 && DataControl.timeSlows > 0)
             {
                 DataControl.timeSlows--;
-                StartCoroutine(SoundManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
+                StartCoroutine(SoundManager.SlowTime(DataControl.timeChargeDuration, DataControl.speedReduction));
             }
                 
 

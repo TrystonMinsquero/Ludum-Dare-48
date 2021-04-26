@@ -5,26 +5,6 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
-    public static Shop Instance;
-
-    public static int suitCost;
-    public int suitCostP;
-
-    public static int bubbleCost;
-    public int bubbleCostP;
-    public static int bubbleMax;
-    public int bubbleMaxP;
-
-    public static int timeSlowCost;
-    public int timeSlowCostP;
-    public static int timeSlowMax;
-    public int timeSlowMaxP;
-
-    public static float timeChargeDuration;
-    public float time_Charge_Duration = 3f;
-    public static float speedReduction;
-    public float speed_Reduction = .5f;
-
     public GameObject shopUI;
 
     public Animator suitAnim;
@@ -46,18 +26,7 @@ public class Shop : MonoBehaviour
 
     void Start()
     {
-        suitCost = suitCostP;
-        bubbleCost = bubbleCostP;
-        bubbleMax = bubbleMaxP;
-        timeSlowCost = timeSlowCostP;
-        timeSlowMax = timeSlowMaxP;
-        timeChargeDuration = time_Charge_Duration;
-        speedReduction = speed_Reduction;
-
         shopUI.SetActive(false);
-
-        
-
     }
     private void Update()
     {
@@ -75,13 +44,13 @@ public class Shop : MonoBehaviour
     }
     public void buySuit()
     {
-        if (DataControl.money >= suitCost && DataControl.suitLevel < 2)
+        if (DataControl.money >= DataControl.suitCost && DataControl.suitLevel < 2)
         {
             SoundManager.playSound(SoundManager.buyItem);
-            DataControl.money -= suitCost;
+            DataControl.money -= DataControl.suitCost;
             DataControl.suitLevel++;
 
-            suitCost = 10;
+            DataControl.suitCost = 10;
 
             Debug.Log(DataControl.suitLevel + "\n" + DataControl.money);
         }
@@ -101,10 +70,10 @@ public class Shop : MonoBehaviour
     }
     public void buyBubble()
     {
-        if (DataControl.money >= bubbleCost && !DataControl.bubbles)
+        if (DataControl.money >= DataControl.bubbleCost && !DataControl.bubbles)
         {
             SoundManager.playSound(SoundManager.buyItem);
-            DataControl.money -= bubbleCost;
+            DataControl.money -= DataControl.bubbleCost;
             DataControl.bubbles = true;
 
             LevelManager.player.GetComponent<Player>().GiveBubble();
@@ -128,10 +97,10 @@ public class Shop : MonoBehaviour
     }
     public void buyTimeSlow()
     {
-        if (DataControl.money >= timeSlowCost && DataControl.timeSlows < timeSlowMax)
+        if (DataControl.money >= DataControl.timeSlowCost && DataControl.timeSlows < DataControl.timeSlowMax)
         {
             SoundManager.playSound(SoundManager.buyItem);
-            DataControl.money -= timeSlowCost;
+            DataControl.money -= DataControl.timeSlowCost;
             DataControl.timeSlows++;
 
             Debug.Log(DataControl.timeSlows + "\n" + DataControl.money);
@@ -143,7 +112,7 @@ public class Shop : MonoBehaviour
     {
         SoundManager.playSound(SoundManager.hoverItem);
         timeChargeAnim.Play("Time Charge Idle_1");
-        speechBubble.text = "Slow down the infinitely expanding dimmension of time...for only " + timeSlowCost + " Gems!";
+        speechBubble.text = "Slow down the infinitely expanding dimmension of time...for only " + DataControl.timeSlowCost + " Gems!";
         Debug.Log("HOVERING TIME CHARGE!!");
     }
     public void unhoverTimeSlow()
@@ -164,21 +133,7 @@ public class Shop : MonoBehaviour
         shopUI.SetActive(false);
         LevelManager.ChangeCameraPosition(CameraPosition.INITIAL);
     }
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            DontDestroyOnLoad(gameObject);
-
-            Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-
-        }
-
-    }
+    
 
 
 }
