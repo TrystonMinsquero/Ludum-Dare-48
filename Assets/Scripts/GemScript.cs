@@ -33,12 +33,6 @@ public class GemScript : MonoBehaviour
         gem.GetComponent<GemScript>().SetValue();
 
     }
-    public void Start()
-    {
-        sr = this.GetComponent<SpriteRenderer>();
-
-
-    }   
 
     public void SetColor()
     {
@@ -57,7 +51,7 @@ public class GemScript : MonoBehaviour
                 gemColor = rareGem ? rareCoreColor : commonCoreColor;
                 break;
         }
-        sr.color = gemColor;
+        this.GetComponent<SpriteRenderer>().color = gemColor;
         
     }
 
@@ -82,10 +76,11 @@ public class GemScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
-        //add valueOfGem to players $$$
-        
-        DataControl.money += gemValue; 
+        if(collision.CompareTag("Player"))
+        {
+            DataControl.money += gemValue;
+            Destroy(gameObject);
+        }
     }
   
 }

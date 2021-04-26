@@ -20,6 +20,11 @@ public class Shop : MonoBehaviour
     public static int timeSlowMax;
     public int timeSlowMaxP;
 
+    public static float timeChargeDuration;
+    public float time_Charge_Duration = 3f;
+    public static float speedReduction;
+    public float speed_Reduction = .5f;
+
     public GameObject shopUI;
 
     public Image suitMaxed;
@@ -28,7 +33,6 @@ public class Shop : MonoBehaviour
     public Image bubbleMaxed;
     public Button upgradeBubble;
 
-    
 
     void Start()
     {
@@ -37,6 +41,8 @@ public class Shop : MonoBehaviour
         bubbleMax = bubbleMaxP;
         timeSlowCost = timeSlowCostP;
         timeSlowMax = timeSlowMaxP;
+        timeChargeDuration = time_Charge_Duration;
+        speedReduction = speed_Reduction;
 
         shopUI.SetActive(false);
 
@@ -94,11 +100,15 @@ public class Shop : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.tag == "Player")
-        shopUI.SetActive(true);
+        {
+            shopUI.SetActive(true);
+            LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         shopUI.SetActive(false);
+        LevelManager.ChangeCameraPosition(CameraPosition.INITIAL);
     }
     private void Awake()
     {

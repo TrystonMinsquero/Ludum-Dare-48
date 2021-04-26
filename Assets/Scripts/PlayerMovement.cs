@@ -6,11 +6,17 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 3f;
     public float drag = 1f;
     public float scale = 1.5f;
+    public float gravity = 2f;
+
+    public float upRotation = 80;
+    public float downHorizontalRotation = 25;
+    public float horizontalRotaion = 35;
 
 
     Controls controls;
     Rigidbody2D rb;
     BoxCollider2D bc;
+    Animator anim;
 
 
     bool facingRight;
@@ -26,8 +32,10 @@ public class PlayerMovement : MonoBehaviour
         controls.Enable();
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
+        anim = this.GetComponent<Animator>();
 
         rb.drag = drag;
+        rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
     }
 
@@ -68,6 +76,13 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
+            if(!LevelManager.timeSlowed && controls.Gameplay.SlowTime.ReadValue<float>() > 0 && DataControl.timeSlows > 0)
+            {
+                DataControl.timeSlows--;
+                StartCoroutine(LevelManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
+            }
+                
+
             if (transform.position.y > maxPlayerHeight)
                 transform.position = new Vector2(transform.position.x, maxPlayerHeight);
 
@@ -76,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = gravity;
             if (playerMovement.x != 0)
             {
                 //Check movement
@@ -90,9 +105,6 @@ public class PlayerMovement : MonoBehaviour
 
                 //Check facing
                 facingRight = playerMovement.x > 0 ? true : false;
-                Vector3 scaleTemp = Vector3.one * scale;
-                scaleTemp.x = facingRight ? scale : -scale;
-                transform.localScale = scaleTemp;
 
             }
 
@@ -105,6 +117,69 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+
+        CheckAnimation(playerMovement);
+
+        onLeftWall = false;
+        onRightWall = false;
+    }
+
+    public void CheckAnimation(Vector2 playerMovement)
+    {
+
+        string state = "Travis ";
+        if (falling)
+        {
+            //Check scalling
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? -scale : scale;
+            transform.localScale = scaleTemp;
+
+            float rotateValue = -1;
+
+            state += "Fall ";
+            //Horizontal Down
+            if(playerMovement.y < 0 && playerMovement.x != 0)
+            {
+                state += "Down";
+                rotateValue = downHorizontalRotation;
+            }
+            //Horizontal Only
+            if(playerMovement.y == 0 && playerMovement.x != 0)
+            {
+                state += "Direction";
+                rotateValue = downHorizontalRotation;
+            }
+            //Up
+            if (playerMovement.y > 0)
+            {
+                state += "Up";
+                rotateValue = upRotation;
+            }
+            //Down only
+            if (playerMovement.y < 0 && playerMovement.x == 0)
+            {
+                state += "Down";
+                rotateValue = 0;
+            }
+            if(playerMovement == Vector2.zero)
+            {
+                state += "Idle";
+                rotateValue = 0;
+            }
+
+            if (rotateValue < 0)
+                Debug.Log("You fucked up");
+
+            rotateValue *= facingRight ? 1 : -1;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateValue));
+            
+        }
+
+
+        state += "_" + DataControl.suitLevel;
+
+        anim.Play(state);
     }
 
     private IEnumerator Flash(float duration, float stunInterval = .2f)
@@ -121,37 +196,57 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Ground")
+        foreach (ContactPoint2D contact in collision.contacts)
         {
-            Debug.Log(collision.transform.parent);
-            grounded = true;
-        }
+            //Debug.Log(contact.collider);
+            if (contact.collider.CompareTag("Ground"))
+            {
+                //Debug.Log("Ground!");
+                grounded = true;
+            }
 
-        if(collision.transform.tag == "Right Wall")
-        {
-            Debug.Log("Right Wall!");
-            onRightWall = true;
+            if (contact.collider.CompareTag("Right Wall"))
+            {
+                //Debug.Log("Right Wall!");
+                onRightWall = true;
+            }
+
+            if (contact.collider.CompareTag("Left Wall"))
+            {
+                //Debug.Log("Left Wall!");
+                onLeftWall = true;
+            }
+
+            if(contact.collider.CompareTag("Obstacle"))
+            {
+                Debug.Log("Die");
+            }
         }
         
-        if(collision.transform.tag == "Left Wall")
-        {
-            Debug.Log("Left Wall!");
-            onLeftWall = true;
-        }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Right Wall")
-            onRightWall = false;
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            
+            if (contact.collider.CompareTag("Right Wall"))
+            {
+                //Debug.Log("Right Wall!");
+                onRightWall = true;
+            }
 
-        if (collision.transform.tag == "Left Wall")
-            onLeftWall = false;
+            if (contact.collider.CompareTag("Left Wall"))
+            {
+                //Debug.Log("Left Wall!");
+                onLeftWall = true;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.tag == "Transition")
+        if(collision.transform.CompareTag("Transition"))
         {
             falling = true;
             grounded = false;

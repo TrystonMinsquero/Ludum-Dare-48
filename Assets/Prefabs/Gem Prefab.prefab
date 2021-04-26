@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2707243268206927267}
   - component: {fileID: 4219336651154053986}
   - component: {fileID: 8218635835547261400}
+  - component: {fileID: 4301050523734265084}
   m_Layer: 0
   m_Name: Gem Prefab
   m_TagString: Untagged
@@ -68,10 +69,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1575175849
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4647b376173e4b64fb54c102df228186, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &8218635835547261400
@@ -106,3 +107,29 @@ MonoBehaviour:
   rareMantleColor: {r: 0.08566215, g: 0.27264825, b: 0.7264151, a: 1}
   commonCoreColor: {r: 0.08627451, g: 0.27450982, b: 0.7294118, a: 1}
   rareCoreColor: {r: 0.5043312, g: 0.07186722, b: 0.8962264, a: 1}
+--- !u!61 &4301050523734265084
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031568402141275410}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.014436305}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.8363887}
+  m_EdgeRadius: 0
