@@ -109,6 +109,7 @@ public class Player : MonoBehaviour
     public void PopBubble()
     {
         bubble.enabled = false;
+        DataControl.bubbles = false;
         StartCoroutine(Flash(1.5f));
     }
 
