@@ -27,6 +27,10 @@ public class Shop : MonoBehaviour
 
     public GameObject shopUI;
 
+    public Animator suitAnim;
+    public Animator bubbleAnim;
+    public Animator timeChargeAnim;
+
     public Text speechBubble;
 
     public Image suitMaxed;
@@ -65,7 +69,7 @@ public class Shop : MonoBehaviour
         }
         if (DataControl.bubbles)
         {
-            bubbleMaxed.gameObject.SetActive(true);
+            //bubbleMaxed.gameObject.SetActive(true);
             upgradeBubble.gameObject.SetActive(false);
         }
     }
@@ -82,13 +86,12 @@ public class Shop : MonoBehaviour
             Debug.Log(DataControl.suitLevel + "\n" + DataControl.money);
         }
         else
-        {
-            //play uh-oh noise (can't buy)
-        }
+            SoundManager.playSound(SoundManager.notEnoughGems);
     }
     public void hoverSuit()
     {
         SoundManager.playSound(SoundManager.hoverItem);
+
         speechBubble.text = "Upgrade your suit to help you survive deeper depths!";
         Debug.Log("HOVERING SUIT!!");
     }
@@ -108,15 +111,19 @@ public class Shop : MonoBehaviour
 
             Debug.Log(DataControl.bubbles + "\n" + DataControl.money);
         }
+        else
+            SoundManager.playSound(SoundManager.notEnoughGems);
     }
     public void hoverBubble()
     {
         SoundManager.playSound(SoundManager.hoverItem);
+        bubbleAnim.Play("BubbleShop_1");
         speechBubble.text = "A bubble might help with obstacles!";
         Debug.Log("HOVERING BUBBLE!!");
     }
     public void unhoverBubble()
     {
+        bubbleAnim.Play("BubbleShop_0");
         Debug.Log("UNHOVERING BUBBLE!!");
     }
     public void buyTimeSlow()
@@ -129,15 +136,19 @@ public class Shop : MonoBehaviour
 
             Debug.Log(DataControl.timeSlows + "\n" + DataControl.money);
         }
+        else
+            SoundManager.playSound(SoundManager.notEnoughGems);
     }
     public void hoverTimeSlow()
     {
         SoundManager.playSound(SoundManager.hoverItem);
+        timeChargeAnim.Play("Time Charge Idle_1");
         speechBubble.text = "Slow down the infinitely expanding dimmension of time...for only " + timeSlowCost + " Gems!";
         Debug.Log("HOVERING TIME CHARGE!!");
     }
     public void unhoverTimeSlow()
     {
+        timeChargeAnim.Play("Time Charge Idle_0");
         Debug.Log("UNHOVERING TIME CHARGE!!");
     }
     private void OnTriggerStay2D(Collider2D collision)
