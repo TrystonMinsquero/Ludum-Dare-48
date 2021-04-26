@@ -11,11 +11,6 @@ public class LevelManager : MonoBehaviour
     public float _sectionDistance = 200f;
     public static GameObject player;
 
-    [Header("Camera Sizes")]
-    public Vector2 _startSize;
-    public Vector2 _gameSize;
-    public Vector2 _shopSize;
-
     private static float camTravelTime;
 
     public static LevelSection levelSection;
@@ -33,10 +28,6 @@ public class LevelManager : MonoBehaviour
     public static int maxDifficulty;
     public static float levelSpeed;
     public static float sectionDistance;
-
-    public static Vector2 startSize;
-    public static Vector2 gameSize;
-    public static Vector2 shopSize;
 
     public static bool falling;
     public static bool timeSlowed;
@@ -65,10 +56,6 @@ public class LevelManager : MonoBehaviour
         falling = false;
         sectionDistance = _sectionDistance;
 
-        startSize = _startSize;
-        gameSize = _gameSize;
-        shopSize = _shopSize;
-
 
         rb = this.GetComponent<Rigidbody2D>();
         cam.transform.position = camPositions[(int)camPosition].position;
@@ -83,7 +70,7 @@ public class LevelManager : MonoBehaviour
     {
         
         distanceTraveled = 0;
-        ChangeCameraSize(new Vector2(5, 8));
+        ChangeCameraPosition(CameraPosition.INITIAL);
     }
 
     private Transform[] sortCamPositions(Transform[] positions)
@@ -165,16 +152,16 @@ public class LevelManager : MonoBehaviour
         switch (cameraPosition)
         {
             case CameraPosition.INITIAL:
-                ChangeCameraSize(startSize);
+                //ChangeCameraSize(startSize);
                 cam.transform.position = camPositions[(int)CameraPosition.INITIAL].position;
                 break;
             case CameraPosition.SHOP:
-                ChangeCameraSize(shopSize);
+                //ChangeCameraSize(shopSize);
                 cam.transform.position = camPositions[(int)CameraPosition.SHOP].position;
                 break;
             case CameraPosition.GAME:
-                ChangeCameraSize(shopSize);
-                cam.transform.position = camPositions[(int)CameraPosition.SHOP].position;
+                //ChangeCameraSize(gameSize);
+                cam.transform.position = camPositions[(int)CameraPosition.GAME].position;
                 break;
         }
         Vector3 vel = cam.GetComponent<Rigidbody2D>().velocity;
