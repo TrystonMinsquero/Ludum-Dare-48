@@ -18507,7 +18507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1089730468}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: Ground Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20250,10 +20250,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numOfDifficulties: 4
-  obstacle_Folder: {fileID: 965284729}
+  creditPlaceDistance: 0
   obstacle_Prefab: {fileID: 8146230555809592122, guid: 3c63a459be077ae4386ae15ef24b619f,
     type: 3}
   gem_Prefab: {fileID: 2031568402141275410, guid: e1a349eea90a11444a44340e38446331,
+    type: 3}
+  credits_Prefab: {fileID: 2641633450106799865, guid: 0ce8c4c444b613940b18b4d926adaf0c,
     type: 3}
   environmentPoints:
   - {fileID: 1236006817}
@@ -20264,9 +20266,6 @@ MonoBehaviour:
   beginningPoints:
   - {fileID: 1349197428}
   - {fileID: 1724119830}
-  environmentStartClear: {fileID: 1236006817}
-  obstacleStartClear: {fileID: 1410148341}
-  beginningStartClear: {fileID: 1349197428}
   tile_Maps:
   - {fileID: 241842593}
   - {fileID: 919768610}
