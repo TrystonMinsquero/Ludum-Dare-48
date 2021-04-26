@@ -208,6 +208,52 @@ public class LevelManager : MonoBehaviour
         currentSong = song;
     }
 
+    public static IEnumerator transitionToSound(AudioSource song)
+    {
+        if (currentSong != null)
+            currentSong.loop = false;
+
+
+        if (song != null)
+        {
+            if (song != themes[(int)LevelSection.MANTLE])
+                song.loop = true;
+            song.Play();
+        }
+
+
+        for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
+        {
+            if (currentSong != null && currentSong.volume > 0)
+                currentSong.volume -= Time.deltaTime * maxVolume;
+            if (song != null && song.volume < maxVolume)
+                song.volume += Time.deltaTime * maxVolume;
+            yield return null;
+        }
+        
+        if (currentSong != null)
+            currentSong.volume = 0;
+        if (song != null)
+        {
+            song.volume = maxVolume;
+            if (song == themes[(int)LevelSection.MANTLE])
+            {
+                while (song.isPlaying)
+                {
+                    yield return null;
+                }
+                song.volume = 0;
+                song.loop = false;
+                song = themes[(int)LevelSection.MANTLE + 1];
+                song.volume = maxVolume;
+                song.loop = true;
+                song.Play();
+            }
+        }
+
+        currentSong = song;
+    }
+
     IEnumerator PlayAfterTime(float time)
     {
         yield return new WaitForSeconds(time);

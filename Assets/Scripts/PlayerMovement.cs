@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float downHorizontalRotation = 25;
     public float horizontalRotaion = 35;
 
-
+    Player player;
     Controls controls;
     Rigidbody2D rb;
     BoxCollider2D bc;
@@ -34,18 +34,21 @@ public class PlayerMovement : MonoBehaviour
     {
         controls = new Controls();
         controls.Enable();
+        player = this.GetComponent<Player>();
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
         sr = this.GetComponent<SpriteRenderer>();
         smoke = this.GetComponentInChildren<ParticleSystem>();
-        bubble = this.GetComponentInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer renderer in this.GetComponentsInChildren<SpriteRenderer>())
+            if (renderer != sr)
+                bubble = renderer;
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
         smoke.Stop();
-        hasBubble = DataControl.bubbles;
+        bubble.enabled = false;
     }
 
     private void FixedUpdate()
@@ -256,14 +259,16 @@ public class PlayerMovement : MonoBehaviour
         smoke.Stop();
         while (smoke.IsAlive())
             yield return null;
-        Die();
+        player.Die();
 
     }
 
     public void Splat()
     {
+
         controls.Disable();
         splat = true;
+        player.DieAfterTime(4);
         
     }
 
@@ -279,10 +284,6 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(Flash(1.5f));
     }
 
-    public void Die()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-    }
 
     private IEnumerator Flash(float duration)
     {
@@ -327,7 +328,6 @@ public class PlayerMovement : MonoBehaviour
                     PopBubble();
                 else
                     Splat();
-                Debug.Log("Die");
             }
 
         }
@@ -368,4 +368,5 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+
 }
