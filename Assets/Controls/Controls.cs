@@ -25,6 +25,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SlowTime"",
+                    ""type"": ""Button"",
+                    ""id"": ""8f200ecd-7b8b-4b68-9c4d-620233a8c473"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -192,6 +200,28 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b221eea-9d72-4b26-8078-59a9e7793475"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SlowTime"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed70c9bc-6685-4c1c-946f-b6f383a4ff01"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SlowTime"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -201,6 +231,7 @@ public class @Controls : IInputActionCollection, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
+        m_Gameplay_SlowTime = m_Gameplay.FindAction("SlowTime", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,11 +282,13 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Gameplay;
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_Movement;
+    private readonly InputAction m_Gameplay_SlowTime;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
         public GameplayActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
+        public InputAction @SlowTime => m_Wrapper.m_Gameplay_SlowTime;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -268,6 +301,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMovement;
+                @SlowTime.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowTime;
+                @SlowTime.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowTime;
+                @SlowTime.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowTime;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -275,6 +311,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @SlowTime.started += instance.OnSlowTime;
+                @SlowTime.performed += instance.OnSlowTime;
+                @SlowTime.canceled += instance.OnSlowTime;
             }
         }
     }
@@ -282,5 +321,6 @@ public class @Controls : IInputActionCollection, IDisposable
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnSlowTime(InputAction.CallbackContext context);
     }
 }

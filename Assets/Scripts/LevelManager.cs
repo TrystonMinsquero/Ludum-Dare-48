@@ -5,7 +5,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
 
-    public float levelSpeed = 5f;
+    public float level_Speed = 5f;
     public float cam_Travel_Time = 2f;
     public float sectionDistance = 200f;
     public float Max_Volume = .1f;
@@ -32,9 +32,13 @@ public class LevelManager : MonoBehaviour
     public static int maxDifficulty = 1;
     private static float maxVolume;
     public static float songChangeInterval;
+    public static float levelSpeed;
 
     public static AudioSource[] themes;
     public static AudioSource currentSong;
+
+    public static bool falling;
+    public static bool timeSlowed;
 
     Rigidbody2D rb;
 
@@ -49,6 +53,7 @@ public class LevelManager : MonoBehaviour
         camTravelTime = cam_Travel_Time;
         maxVolume = Max_Volume;
         songChangeInterval = song_Change_Interval;
+        levelSpeed = level_Speed;
 
 
         cam = GameObject.Find("Main Camera");
@@ -64,6 +69,10 @@ public class LevelManager : MonoBehaviour
 
         rb = this.GetComponent<Rigidbody2D>();
         cam.transform.position = camPositions[(int)camPosition].position;
+
+        cam.AddComponent<Rigidbody2D>();
+        cam.GetComponent<Rigidbody2D>().gravityScale = 0;
+        cam.GetComponent<Rigidbody2D>().isKinematic = true;
 
         StartCoroutine(transitionToSong(themes[0]));
     }
@@ -115,14 +124,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public static void ChangeLevelSection(LevelSection section)
-    {
-        levelSection = section;
-
-        //Do Stuff
-        //switch (section) { }
-    }
-
     public static void NextLevelSection()
     {
         levelSection++;
@@ -130,15 +131,29 @@ public class LevelManager : MonoBehaviour
         {
             case LevelSection.CRUST:
                 ChangeCameraPosition(CameraPosition.GAME);
+                GameObject.Find("Temp Walls").SetActive(false);
                 break;
         }
     }
 
     public static void ChangeCameraPosition(CameraPosition cameraPosition)
     {
-
+        Vector3 vel = cam.GetComponent<Rigidbody2D>().velocity;
         cam.transform.position = Vector3.Lerp(cam.transform.position, camPositions[(int)cameraPosition].position, camTravelTime);
         CAM_POSITION = cameraPosition;
+
+    }
+
+    public static IEnumerator SlowTime(float duration, float slowFactor)
+    {
+        levelSpeed = levelSpeed * slowFactor;
+        currentSong.pitch = .5f;
+        timeSlowed = true;
+        for (float i = duration; i > 0; i -= Time.deltaTime)
+            yield return null;
+        timeSlowed = false;
+        levelSpeed = levelSpeed / slowFactor;
+        currentSong.pitch = 1;
 
     }
 
@@ -147,12 +162,15 @@ public class LevelManager : MonoBehaviour
     {
         if (currentSong != null)
             currentSong.loop = false;
+
         
         if(song != null)
         {
-            song.loop = true;
+            if(song != themes[(int)LevelSection.MANTLE])
+                song.loop = true;
             song.Play();
         }
+        
 
         for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
         {
@@ -165,7 +183,22 @@ public class LevelManager : MonoBehaviour
         if(currentSong != null)
             currentSong.volume = 0;
         if (song != null)
+        {
             song.volume = maxVolume;
+            if(song == themes[(int)LevelSection.MANTLE])
+            {
+                while (song.isPlaying)
+                {
+                    yield return null;
+                }
+                song.volume = 0;
+                song.loop = false;
+                song = themes[(int)LevelSection.MANTLE + 1];
+                song.volume = maxVolume;
+                song.loop = true;
+                song.Play();
+            }
+        }
 
         currentSong = song;
     }
@@ -173,7 +206,8 @@ public class LevelManager : MonoBehaviour
     IEnumerator ExecuteAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        StartCoroutine(transitionToSong(themes[(int)levelSection]));
+        AudioSource song = levelSection > LevelSection.MANTLE ? themes[(int)levelSection + 1] : themes[(int)levelSection];
+        StartCoroutine(transitionToSong(song));
     }
 
 }

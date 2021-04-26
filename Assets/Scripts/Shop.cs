@@ -20,12 +20,19 @@ public class Shop : MonoBehaviour
     public static int timeSlowMax;
     public int timeSlowMaxP;
 
-    public GameObject shopUI;
-    public Text suitMaxed;
-    public Button upgradeSuit;
-    public Text bubbleMaxed;
+    public static float timeChargeDuration;
+    public float time_Charge_Duration = 3f;
+    public static float speedReduction;
+    public float speed_Reduction = .5f;
 
-    
+    public GameObject shopUI;
+
+    public Image suitMaxed;
+    public Button upgradeSuit;
+
+    public Image bubbleMaxed;
+    public Button upgradeBubble;
+
 
     void Start()
     {
@@ -34,17 +41,24 @@ public class Shop : MonoBehaviour
         bubbleMax = bubbleMaxP;
         timeSlowCost = timeSlowCostP;
         timeSlowMax = timeSlowMaxP;
+        timeChargeDuration = time_Charge_Duration;
+        speedReduction = speed_Reduction;
 
         shopUI.SetActive(false);
 
     }
     private void Update()
     {
-        if(DataControl.suitLevel == 2)
+        if(DataControl.suitLevel >= 2)
         {
             suitMaxed.gameObject.SetActive(true);
             upgradeSuit.gameObject.SetActive(false);
 
+        }
+        if(DataControl.bubbles >= bubbleMax)
+        {
+            bubbleMaxed.gameObject.SetActive(true);
+            upgradeBubble.gameObject.SetActive(false);
         }
     }
     public void buySuit()
@@ -54,7 +68,9 @@ public class Shop : MonoBehaviour
             DataControl.money -= suitCost;
             DataControl.suitLevel++;
 
-            suitCost = 10; 
+            suitCost = 10;
+
+            Debug.Log(DataControl.suitLevel + "\n" + DataControl.money);
         }
         else
         {
@@ -68,7 +84,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= bubbleCost;
             DataControl.bubbles++;
 
-            
+            Debug.Log(DataControl.bubbles+"\n"+DataControl.money);
         }
     }
     public void buyTimeSlow()
@@ -78,17 +94,21 @@ public class Shop : MonoBehaviour
             DataControl.money -= timeSlowCost;
             DataControl.timeSlows++;
 
-            
+            Debug.Log(DataControl.timeSlows + "\n" + DataControl.money);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.tag == "Player")
-        shopUI.SetActive(true);
+        {
+            shopUI.SetActive(true);
+            LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         shopUI.SetActive(false);
+        LevelManager.ChangeCameraPosition(CameraPosition.INITIAL);
     }
     private void Awake()
     {

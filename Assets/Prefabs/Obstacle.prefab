@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 47774978946928738}
   m_Layer: 0
   m_Name: Right Wall
-  m_TagString: Left Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,8 +47,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 0, y: -0.5}
-  - {x: 0, y: 0.5}
+  - {x: 0, y: -0.48}
+  - {x: 0, y: 0.48}
 --- !u!1 &2548852391404455074
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 7934596113460212757}
   m_Layer: 0
   m_Name: Ceiling
-  m_TagString: Ceiling
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4052265687745443713}
   m_Layer: 0
   m_Name: Left Wall
-  m_TagString: Left Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,8 +145,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 0, y: -0.5}
-  - {x: 0, y: 0.5}
+  - {x: 0, y: -0.48}
+  - {x: 0, y: 0.48}
 --- !u!1 &8146230555809592122
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 8146230555809592127}
   m_Layer: 0
   m_Name: Obstacle
-  m_TagString: Wall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 3102780425507272745}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Ground
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

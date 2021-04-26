@@ -8,12 +8,21 @@ public class LevelGenerator : MonoBehaviour
     public static LevelGenerator instance;
     public int numOfDifficulties = 4;
 
-    public float rareChance = .2f;
+    public static float rareChance = .2f;
     public GameObject obstacle_Folder;
     public GameObject obstacle_Prefab;
+    public GameObject gem_Prefab;
+    public Transform[] environmentPoints = new Transform[2];
+    public Transform[] obstaclePoints = new Transform[2];
+    public Transform[] beginningPoints = new Transform[2];
+
+    public Transform environmentStartClear;
+    public Transform obstacleStartClear;
+    public Transform beginningStartClear;
 
     private static GameObject obstacleFolder;
     private static GameObject obstaclePrefab;
+    private static GameObject gemPrefab;
 
     public static List<Texture2D[]> obstacleMaps;
     public static Texture2D[] foregroundMaps;
@@ -46,6 +55,7 @@ private void Awake()
         transitionTiles = new List<TileBase[]>();
         obstacleFolder = obstacle_Folder;
         obstaclePrefab = obstacle_Prefab;
+        gemPrefab = gem_Prefab;
         tileMaps = tile_Maps;
 
 
@@ -122,20 +132,32 @@ private void Awake()
     public void FixedUpdate()
     {
         Transform[] obstacles = obstacleFolder.GetComponentsInChildren<Transform>();
-        if(obstacles.Length == 0)
+        
+        if(obstacles.Length > 0)
             foreach(Transform obstacle in obstacles)
-                if (obstacle.position.y > LevelManager.cam.transform.position.y + LevelManager.camHeight)
+                if (obstacle != obstacleFolder.transform && obstacle.position.y > LevelManager.cam.transform.position.y + LevelManager.camHeight)
+                {
                     Destroy(obstacle.gameObject);
+                }
+
+        if (LevelManager.falling)
+        {
+            if(LevelManager.distanceTraveled - LevelManager.camHeight <= 35)
+                ClearRowOfTiles(beginningPoints[0].position, beginningPoints[1].position);
+            ClearRowOfTiles(environmentPoints[0].position, environmentPoints[1].position);
+            ClearRowOfTiles(obstaclePoints[0].position, obstaclePoints[1].position);
+
+        }
         
         if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0)
         {
-            GenerateSegment((int)UnityEngine.Random.Range(0, LevelManager.maxDifficulty + 1));
+            GenerateSegment((int)UnityEngine.Random.Range(.9f, LevelManager.maxDifficulty + 1));
         }
     }
 
     public static void GenerateSegment(int difficulty)
     {
-        Debug.Log("Distance To Place = " + distanceToPlace);
+        //Debug.Log("Distance To Place = " + distanceToPlace);
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
@@ -211,15 +233,26 @@ private void Awake()
 
         if (tileMapType == TileMapType.FOREGROUND)
         {
-            //Add coins
-
+            
             if (!LevelManager.transition)
             {
-                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length)
+                //coins have a decimal of 10879231
+                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length && tileIndex != 10879231)
                     Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
                 else
-                    tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
-                Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+                {
+                    if (tileIndex == 10879231)
+                    {
+                        GemScript.createGem(gemPrefab, pos, (UnityEngine.Random.Range(0, 100) < rareChance * 100), obstacleFolder.transform);
+                    }
+                    else
+                    {
+                        tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
+                        Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
+                    }
+                }
+                    
+                    
             }
             else
             {
@@ -240,6 +273,21 @@ private void Awake()
                 tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
         }
 
+    }
+
+    private static void ClearRowOfTiles(Vector2 startPosition, Vector2 endPosition)
+    {
+        int length = (int)Mathf.Round(endPosition.x - startPosition.x + 1);
+        foreach(Tilemap tilemap in tileMaps)
+        {
+            for(int i = 0; i < length; i++)
+            {
+                Vector3Int gridPos = tilemap.WorldToCell(startPosition + Vector2.right * i);
+                if (tilemap.HasTile(gridPos))
+                    tilemap.SetTile(gridPos, null);
+
+            }
+        }
     }
 
     private static void SetTransitionIndex()
