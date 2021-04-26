@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     BoxCollider2D bc;
     Animator anim;
+    ParticleSystem smoke;
+    SpriteRenderer sr;
 
 
     bool facingRight;
@@ -33,10 +35,13 @@ public class PlayerMovement : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
+        smoke = this.GetComponentInChildren<ParticleSystem>();
+        sr = this.GetComponent<SpriteRenderer>();
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
+        smoke.Stop();
     }
 
     private void FixedUpdate()
@@ -118,7 +123,10 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
+        smoke.gameObject.transform.rotation = Quaternion.Euler(-90, 0, 0);
         CheckAnimation(playerMovement);
+
+
 
         onLeftWall = false;
         onRightWall = false;
@@ -180,6 +188,36 @@ public class PlayerMovement : MonoBehaviour
         state += "_" + DataControl.suitLevel;
 
         anim.Play(state);
+    }
+
+    public IEnumerator Burnout(float fadeoutDuration = 3.5f, float timeUntilFade = 3f)
+    {
+        Debug.Log("Start smoke");
+        smoke.Play();
+        for (float i = timeUntilFade; i >= 0; i -= Time.deltaTime)
+            yield return null;
+
+        Debug.Log("Start fade");
+        controls.Disable();
+        for (float i = fadeoutDuration; i >= 0; i -= Time.deltaTime)
+        {
+            Color newAlpha = sr.color;
+            newAlpha.a -= Time.deltaTime;
+            sr.color = newAlpha;
+            yield return null;
+        }
+        Debug.Log("Start Final words");
+
+        smoke.Stop();
+        while (smoke.IsAlive())
+            yield return null;
+        Die();
+
+    }
+
+    public void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     private IEnumerator Flash(float duration, float stunInterval = .2f)

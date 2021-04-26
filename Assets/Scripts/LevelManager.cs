@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
     private float timeUntilSongPlay = 1f;
     public float song_Change_Interval = 1f;
     public GameObject themeParent;
+    public static GameObject player;
 
 
     private static float camTravelTime;
@@ -55,7 +56,7 @@ public class LevelManager : MonoBehaviour
         songChangeInterval = song_Change_Interval;
         levelSpeed = level_Speed;
 
-
+        player = GameObject.Find("Travis");
         cam = GameObject.Find("Main Camera");
         walls = GameObject.Find("Walls");
         walls.SetActive(false);
@@ -114,7 +115,11 @@ public class LevelManager : MonoBehaviour
 
         distanceTraveled = rb.position.y;
 
-        if(distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
+
+        if ((int)levelSection > DataControl.suitLevel + 1)
+            StartCoroutine(player.GetComponent<PlayerMovement>().Burnout());
+
+        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
         {
             transition = true;
             maxDifficulty++;
