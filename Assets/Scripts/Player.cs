@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public bool hasBubble;
     [System.NonSerialized]
     public bool isDying;
+    [System.NonSerialized]
+    public bool outOfBounds;
 
     private void Start()
     {
@@ -49,10 +51,10 @@ public class Player : MonoBehaviour
 
     public IEnumerator Die()
     {
-        StartCoroutine(SoundManager.TransitionToSong(null));
-        SoundManager.playSound(SoundManager.death);
-        Debug.Log("Waiting for music to finish");
-        while (!isDying)
+        StartCoroutine(SoundManager.TransitionToSong(SoundManager.death));
+        while (SoundManager.currentSong != SoundManager.death)
+            yield return null;
+        while (!outOfBounds || SoundManager.currentSong.isPlaying)
             yield return null;
 
 

@@ -136,6 +136,8 @@ public class SoundManager : MonoBehaviour
         if (song != null)
         {
             song.volume = maxVolume;
+            if (song == death)
+                song.loop = false;
             if (song == themes[(int)LevelSection.MANTLE])
             {
                 while (song.isPlaying)
@@ -180,9 +182,10 @@ public class SoundManager : MonoBehaviour
 
     //Add Method to play each sound here
 
-    public static void playSound(AudioSource sound)
+    public static AudioSource playSound(AudioSource sound)
     {
         sound.Play();
+        return sound;
     }
 
     

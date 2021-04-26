@@ -93,9 +93,9 @@ public class PlayerMovement : MonoBehaviour
             if (transform.position.y < minPlayerHeight)
                 transform.position = new Vector2(transform.position.x, minPlayerHeight);
 
-            if (splat && transform.position.y > maxPlayerHeight)
+            if (splat && transform.position.y > maxPlayerHeight + 2)
             {
-                player.isDying = true;
+                player.outOfBounds = true;
             }
 
         }
