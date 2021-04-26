@@ -57,6 +57,11 @@ public class SoundManager : MonoBehaviour
             Destroy(this);
         else
             instance = this;
+        if (currentSong != null)
+        {
+            currentSong.Stop();
+            currentSong = null;
+        }
     }
 
     private void Start()
@@ -103,9 +108,12 @@ public class SoundManager : MonoBehaviour
 
     public static IEnumerator TransitionToSong(AudioSource song)
     {
+
+        if (LevelManager.player.GetComponent<Player>().isDying)
+            yield break;
+
         if (currentSong != null)
             currentSong.loop = false;
-
 
         if (song != null)
         {
@@ -128,6 +136,8 @@ public class SoundManager : MonoBehaviour
         if (song != null)
         {
             song.volume = maxVolume;
+            if (song == death)
+                song.loop = false;
             if (song == themes[(int)LevelSection.MANTLE])
             {
                 while (song.isPlaying)
@@ -146,10 +156,10 @@ public class SoundManager : MonoBehaviour
         currentSong = song;
     }
 
-    /*
+    
     public static IEnumerator playDeath()
     {
-        // sound = death
+        AudioSource sound = death;
         for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
         {
             if (currentSong != null && currentSong.volume > 0)
@@ -165,15 +175,17 @@ public class SoundManager : MonoBehaviour
         {
             sound.volume = maxVolume;
         }
-
         currentSong = sound;
-    }*/
+        while (currentSong.isPlaying)
+            yield return null;
+    }
 
     //Add Method to play each sound here
 
-    public static void playSound(AudioSource sound)
+    public static AudioSource playSound(AudioSource sound)
     {
         sound.Play();
+        return sound;
     }
 
     

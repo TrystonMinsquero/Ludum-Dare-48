@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -13,20 +14,20 @@ public class LevelManager : MonoBehaviour
 
     private static float camTravelTime;
 
-    public static LevelSection levelSection = LevelSection.GROUND;
+    public static LevelSection levelSection;
     public static GameObject cam;
     public static int camWidth = 10;
     public static int camHeight = 16;
     public static GameObject walls;
 
     public GameObject cameraPositions;
-    public CameraPosition camPosition = CameraPosition.INITIAL;
+    public CameraPosition camPosition;
     public static CameraPosition CAM_POSITION;
     public static Transform[] camPositions;
 
     public static float distanceTraveled;
     public static bool transition;
-    public static int maxDifficulty = 1;
+    public static int maxDifficulty;
     public static float levelSpeed;
 
     public static bool falling;
@@ -50,7 +51,11 @@ public class LevelManager : MonoBehaviour
         walls = GameObject.Find("Walls");
         walls.SetActive(false);
         camPositions = sortCamPositions(cameraPositions.GetComponentsInChildren<Transform>());
-
+        levelSection = LevelSection.GROUND;
+        camPosition = CameraPosition.INITIAL;
+        maxDifficulty = 1;
+        falling = false;
+        transition = false;
 
 
         rb = this.GetComponent<Rigidbody2D>();
@@ -64,7 +69,8 @@ public class LevelManager : MonoBehaviour
 
     public void Start()
     {
-
+        
+        distanceTraveled = 0;
     }
 
     private Transform[] sortCamPositions(Transform[] positions)
@@ -99,10 +105,10 @@ public class LevelManager : MonoBehaviour
         distanceTraveled = rb.position.y;
 
 
-        if ((int)levelSection > DataControl.suitLevel + 1)
-            StartCoroutine(player.GetComponent<PlayerMovement>().Burnout());
 
-        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
+        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || 
+            distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE || 
+            distanceTraveled >= sectionDistance * 3 && levelSection < LevelSection.BOTTOM)
         {
             transition = true;
             maxDifficulty++;
@@ -121,7 +127,14 @@ public class LevelManager : MonoBehaviour
                 ChangeCameraPosition(CameraPosition.GAME);
                 GameObject.Find("Temp Walls").SetActive(false);
                 break;
+            case LevelSection.BOTTOM:
+                break;
+
         }
+
+        
+        if ((int)levelSection > DataControl.suitLevel + 1 && levelSection != LevelSection.BOTTOM)
+            player.GetComponent<Player>().StartBurnout();
     }
 
     public static void ChangeCameraPosition(CameraPosition cameraPosition)
@@ -139,7 +152,10 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(SoundManager.TransitionToSong(song));
     }
 
-
+    public static void ResetScene()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
 
 public enum CameraPosition

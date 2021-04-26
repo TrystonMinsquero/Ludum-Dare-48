@@ -8,26 +8,24 @@ public class PlayerMovement : MonoBehaviour
     public float scale = 1.5f;
     public float gravity = 2f;
 
+
     public float upRotation = 80;
     public float downHorizontalRotation = 25;
     public float horizontalRotaion = 35;
 
     Player player;
-    Controls controls;
+    [System.NonSerialized]
+    public Controls controls;
     Rigidbody2D rb;
-    BoxCollider2D bc;
     Animator anim;
-    ParticleSystem smoke;
-    SpriteRenderer sr;
-    SpriteRenderer bubble;
 
     bool facingRight;
     bool grounded = true;
     bool falling;
     bool onRightWall;
     bool onLeftWall;
-    bool splat;
-    bool hasBubble;
+    [System.NonSerialized]
+    public bool splat;
 
     // Start is called before the first frame update
     void Start()
@@ -36,19 +34,12 @@ public class PlayerMovement : MonoBehaviour
         controls.Enable();
         player = this.GetComponent<Player>();
         rb = this.GetComponent<Rigidbody2D>();
-        bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
-        sr = this.GetComponent<SpriteRenderer>();
-        smoke = this.GetComponentInChildren<ParticleSystem>();
-        foreach (SpriteRenderer renderer in this.GetComponentsInChildren<SpriteRenderer>())
-            if (renderer != sr)
-                bubble = renderer;
+        
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
-        smoke.Stop();
-        bubble.enabled = false;
     }
 
     private void FixedUpdate()
@@ -60,8 +51,8 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = 0;
 
-            float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + bc.size.y / 2;
-            float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - bc.size.y / 2;
+            float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + this.GetComponent<BoxCollider2D>().size.y / 2;
+            float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - this.GetComponent<BoxCollider2D>().size.y / 2;
             //Directional movement
             if (playerMovement != Vector2.zero)
             {
@@ -92,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
             if(!LevelManager.timeSlowed && controls.Gameplay.SlowTime.ReadValue<float>() > 0 && DataControl.timeSlows > 0)
             {
                 DataControl.timeSlows--;
-                StartCoroutine(SoundManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
+                StartCoroutine(SoundManager.SlowTime(DataControl.timeChargeDuration, DataControl.speedReduction));
             }
                 
 
@@ -101,6 +92,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (transform.position.y < minPlayerHeight)
                 transform.position = new Vector2(transform.position.x, minPlayerHeight);
+
+            if (splat && transform.position.y > maxPlayerHeight + 2)
+            {
+                player.outOfBounds = true;
+            }
+
         }
         else
         {
@@ -125,13 +122,13 @@ public class PlayerMovement : MonoBehaviour
             if (playerMovement.y > 0 && grounded)
             {
                 //Debug.Log("Jump");
+                SoundManager.playSound(SoundManager.jump);
                 grounded = false;
                 rb.velocity = new Vector2(rb.velocity.x, moveSpeed * 2);
             }
 
         }
 
-        smoke.gameObject.transform.rotation = Quaternion.Euler(-90, 0, 0);
         CheckAnimation(playerMovement);
 
 
@@ -238,65 +235,8 @@ public class PlayerMovement : MonoBehaviour
         anim.Play(state);
     }
 
-    public IEnumerator Burnout(float fadeoutDuration = 3.5f, float timeUntilFade = 3f)
-    {
-        Debug.Log("Start smoke");
-        smoke.Play();
-        for (float i = timeUntilFade; i >= 0; i -= Time.deltaTime)
-            yield return null;
+    
 
-        Debug.Log("Start fade");
-        controls.Disable();
-        for (float i = fadeoutDuration; i >= 0; i -= Time.deltaTime)
-        {
-            Color newAlpha = sr.color;
-            newAlpha.a -= Time.deltaTime / fadeoutDuration;
-            sr.color = newAlpha;
-            yield return null;
-        }
-        Debug.Log("Start Final words");
-
-        smoke.Stop();
-        while (smoke.IsAlive())
-            yield return null;
-        player.Die();
-
-    }
-
-    public void Splat()
-    {
-
-        controls.Disable();
-        splat = true;
-        StartCoroutine(player.DieAfterTime(4));
-        
-    }
-
-    public void GiveBubble()
-    {
-        hasBubble = true;
-        bubble.enabled = true;
-    }
-
-    public void PopBubble()
-    {
-        bubble.enabled = false;
-        StartCoroutine(Flash(1.5f));
-    }
-
-
-    private IEnumerator Flash(float duration)
-    {
-
-        for (float i = duration; i >= 0; i -= Time.fixedDeltaTime)
-        {
-            gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
-            yield return null;
-        }
-        gameObject.GetComponent<SpriteRenderer>().enabled = true;
-        hasBubble = false;
-        
-    }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -324,10 +264,10 @@ public class PlayerMovement : MonoBehaviour
 
             if(contact.collider.CompareTag("Obstacle"))
             {
-                if (hasBubble)
-                    PopBubble();
+                if (player.hasBubble)
+                    player.PopBubble();
                 else
-                    Splat();
+                    player.Splat();
             }
 
         }
