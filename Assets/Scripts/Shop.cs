@@ -27,11 +27,17 @@ public class Shop : MonoBehaviour
 
     public GameObject shopUI;
 
+    public Text defaultText;
+
     public Image suitMaxed;
     public Button upgradeSuit;
+    public Text hoverSuitText;
 
     public Image bubbleMaxed;
     public Button upgradeBubble;
+    public Text hoverBubbleText;
+
+    public Text hoverTimeSlowText;
 
 
     void Start()
@@ -49,13 +55,13 @@ public class Shop : MonoBehaviour
     }
     private void Update()
     {
-        if(DataControl.suitLevel >= 2)
+        if (DataControl.suitLevel >= 2)
         {
             suitMaxed.gameObject.SetActive(true);
             upgradeSuit.gameObject.SetActive(false);
 
         }
-        if(DataControl.bubbles)
+        if (DataControl.bubbles)
         {
             bubbleMaxed.gameObject.SetActive(true);
             upgradeBubble.gameObject.SetActive(false);
@@ -63,7 +69,7 @@ public class Shop : MonoBehaviour
     }
     public void buySuit()
     {
-        if(DataControl.money >= suitCost && DataControl.suitLevel < 2)
+        if (DataControl.money >= suitCost && DataControl.suitLevel < 2)
         {
             DataControl.money -= suitCost;
             DataControl.suitLevel++;
@@ -79,27 +85,43 @@ public class Shop : MonoBehaviour
     }
     public void hoverSuit()
     {
+        defaultText.gameObject.SetActive(false);
+        hoverSuitText.gameObject.SetActive(true);
         Debug.Log("HOVERING SUIT!!");
+    }
+    public void unhoverSuit()
+    {
+        defaultText.gameObject.SetActive(true);
+        hoverSuitText.gameObject.SetActive(false);
+        Debug.Log("UNHOVERING SUIT!!");
     }
     public void buyBubble()
     {
-        if(DataControl.money >= bubbleCost && !DataControl.bubbles)
+        if (DataControl.money >= bubbleCost && !DataControl.bubbles)
         {
             DataControl.money -= bubbleCost;
             DataControl.bubbles = true;
 
             LevelManager.player.GetComponent<PlayerMovement>().GiveBubble();
 
-            Debug.Log(DataControl.bubbles+"\n"+DataControl.money);
+            Debug.Log(DataControl.bubbles + "\n" + DataControl.money);
         }
     }
     public void hoverBubble()
     {
+        defaultText.gameObject.SetActive(false);
+        hoverBubbleText.gameObject.SetActive(true);
         Debug.Log("HOVERING BUBBLE!!");
+    }
+    public void unhoverBubble()
+    {
+        defaultText.gameObject.SetActive(true);
+        hoverBubbleText.gameObject.SetActive(false);
+        Debug.Log("UNHOVERING BUBBLE!!");
     }
     public void buyTimeSlow()
     {
-        if(DataControl.money >= timeSlowCost && DataControl.timeSlows < timeSlowMax)
+        if (DataControl.money >= timeSlowCost && DataControl.timeSlows < timeSlowMax)
         {
             DataControl.money -= timeSlowCost;
             DataControl.timeSlows++;
@@ -109,11 +131,19 @@ public class Shop : MonoBehaviour
     }
     public void hoverTimeSlow()
     {
+        defaultText.gameObject.SetActive(false);
+        hoverTimeSlowText.gameObject.SetActive(true);
         Debug.Log("HOVERING TIME CHARGE!!");
+    }
+    public void unhoverTimeSlow()
+    {
+        defaultText.gameObject.SetActive(true);
+        hoverTimeSlowText.gameObject.SetActive(false);
+        Debug.Log("UNHOVERING TIME CHARGE!!");
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if (collision.tag == "Player")
         {
             shopUI.SetActive(true);
             LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
