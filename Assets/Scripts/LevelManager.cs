@@ -124,7 +124,7 @@ public class LevelManager : MonoBehaviour
             transition = true;
             maxDifficulty++;
             NextLevelSection();
-            StartCoroutine(ExecuteAfterTime(timeUntilSongPlay));
+            StartCoroutine(PlayAfterTime(timeUntilSongPlay));
             
         }
     }
@@ -208,7 +208,7 @@ public class LevelManager : MonoBehaviour
         currentSong = song;
     }
 
-    IEnumerator ExecuteAfterTime(float time)
+    IEnumerator PlayAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
         AudioSource song = levelSection > LevelSection.MANTLE ? themes[(int)levelSection + 1] : themes[(int)levelSection];

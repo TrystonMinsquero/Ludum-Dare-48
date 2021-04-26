@@ -55,7 +55,7 @@ public class Shop : MonoBehaviour
             upgradeSuit.gameObject.SetActive(false);
 
         }
-        if(DataControl.bubbles >= bubbleMax)
+        if(DataControl.bubbles)
         {
             bubbleMaxed.gameObject.SetActive(true);
             upgradeBubble.gameObject.SetActive(false);
@@ -83,10 +83,10 @@ public class Shop : MonoBehaviour
     }
     public void buyBubble()
     {
-        if(DataControl.money >= bubbleCost && DataControl.bubbles < bubbleMax)
+        if(DataControl.money >= bubbleCost && !DataControl.bubbles)
         {
             DataControl.money -= bubbleCost;
-            DataControl.bubbles++;
+            DataControl.bubbles = true;
 
             Debug.Log(DataControl.bubbles+"\n"+DataControl.money);
         }

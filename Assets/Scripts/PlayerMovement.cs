@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     Animator anim;
     ParticleSystem smoke;
     SpriteRenderer sr;
+    SpriteRenderer bubble;
 
     bool facingRight;
     bool grounded = true;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     bool onRightWall;
     bool onLeftWall;
     bool splat;
+    bool hasBubble;
 
     // Start is called before the first frame update
     void Start()
@@ -35,13 +37,15 @@ public class PlayerMovement : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
         anim = this.GetComponent<Animator>();
-        smoke = this.GetComponentInChildren<ParticleSystem>();
         sr = this.GetComponent<SpriteRenderer>();
+        smoke = this.GetComponentInChildren<ParticleSystem>();
+        bubble = this.GetComponentInChildren<SpriteRenderer>();
 
         rb.drag = drag;
         rb.gravityScale = gravity;
         transform.localScale = Vector3.one * scale;
         smoke.Stop();
+        hasBubble = DataControl.bubbles;
     }
 
     private void FixedUpdate()
@@ -52,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         if (falling)
         {
             rb.gravityScale = 0;
+
             float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + bc.size.y / 2;
             float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - bc.size.y / 2;
             //Directional movement
@@ -88,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
             }
                 
 
-            if (transform.position.y > maxPlayerHeight)
+            if (transform.position.y > maxPlayerHeight && !splat)
                 transform.position = new Vector2(transform.position.x, maxPlayerHeight);
 
             if (transform.position.y < minPlayerHeight)
@@ -255,20 +260,41 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    public void Splat()
+    {
+        controls.Disable();
+        splat = true;
+        
+    }
+
+    public void GiveBubble()
+    {
+        hasBubble = true;
+        bubble.enabled = true;
+    }
+
+    public void PopBubble()
+    {
+        bubble.enabled = false;
+        StartCoroutine(Flash(1.5f));
+    }
+
     public void Die()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
-    private IEnumerator Flash(float duration, float stunInterval = .2f)
+    private IEnumerator Flash(float duration)
     {
-        float timeUntilFlash = Time.time;
+
         for (float i = duration; i >= 0; i -= Time.fixedDeltaTime)
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
             yield return null;
         }
         gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        hasBubble = false;
+        
     }
 
 
@@ -297,8 +323,13 @@ public class PlayerMovement : MonoBehaviour
 
             if(contact.collider.CompareTag("Obstacle"))
             {
+                if (hasBubble)
+                    PopBubble();
+                else
+                    Splat();
                 Debug.Log("Die");
             }
+
         }
         
     }
