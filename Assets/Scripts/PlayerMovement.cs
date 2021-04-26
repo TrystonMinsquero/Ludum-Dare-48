@@ -20,12 +20,12 @@ public class PlayerMovement : MonoBehaviour
     ParticleSystem smoke;
     SpriteRenderer sr;
 
-
     bool facingRight;
     bool grounded = true;
     bool falling;
     bool onRightWall;
     bool onLeftWall;
+    bool splat;
 
     // Start is called before the first frame update
     void Start()
@@ -134,6 +134,24 @@ public class PlayerMovement : MonoBehaviour
 
     public void CheckAnimation(Vector2 playerMovement)
     {
+        int suitNum = -1;
+        switch (DataControl.suitLevel)
+        {
+            case 0: suitNum = 2;break;
+            case 1: suitNum = 0;break;
+            case 2: suitNum = 1;break;
+        }
+        if (suitNum < 0)
+            Debug.LogError("Suit level not 0, 1, or 2");
+
+        if (splat)
+        {
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? -scale : scale;
+            transform.localScale = scaleTemp;
+            anim.Play("Travis Splat_" + suitNum);
+            return;
+        }
 
         string state = "Travis ";
         if (falling)
@@ -177,15 +195,37 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if (rotateValue < 0)
-                Debug.Log("You fucked up");
+                Debug.Log("You messed up");
 
             rotateValue *= facingRight ? 1 : -1;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateValue));
             
         }
+        else
+        {
+            //Check scalling
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? scale : -scale;
+            transform.localScale = scaleTemp;
 
+            if (!grounded)
+            {
+                state += "Jump";
+            }
+            else if(playerMovement.x != 0)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("Travis Walk_" + suitNum))
+                    return;
+                state += "Walk";
+            }
+            else
+            {
+                state += "Idle";
+            }
 
-        state += "_" + DataControl.suitLevel;
+        }
+
+        state += "_" + suitNum;
 
         anim.Play(state);
     }
@@ -202,7 +242,7 @@ public class PlayerMovement : MonoBehaviour
         for (float i = fadeoutDuration; i >= 0; i -= Time.deltaTime)
         {
             Color newAlpha = sr.color;
-            newAlpha.a -= Time.deltaTime;
+            newAlpha.a -= Time.deltaTime / fadeoutDuration;
             sr.color = newAlpha;
             yield return null;
         }
@@ -223,7 +263,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator Flash(float duration, float stunInterval = .2f)
     {
         float timeUntilFlash = Time.time;
-        for (float i = duration; i >= 0; i -= Time.deltaTime)
+        for (float i = duration; i >= 0; i -= Time.fixedDeltaTime)
         {
             gameObject.GetComponent<SpriteRenderer>().enabled = !gameObject.GetComponent<SpriteRenderer>().enabled;
             yield return null;
