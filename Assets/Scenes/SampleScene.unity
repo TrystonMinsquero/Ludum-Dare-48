@@ -17660,6 +17660,7 @@ GameObject:
   - component: {fileID: 1002174643}
   - component: {fileID: 1002174642}
   - component: {fileID: 1002174641}
+  - component: {fileID: 1002174645}
   - component: {fileID: 1002174640}
   - component: {fileID: 1002174639}
   - component: {fileID: 1002174644}
@@ -17821,6 +17822,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1002174645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002174638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5dbbf07421efaf47ada32de658842b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  death: {fileID: 1175796969}
 --- !u!1001 &1024494016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18363,6 +18377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1134532826}
+  - component: {fileID: 1134532827}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -18386,6 +18401,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1134532827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134532825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd48e2240cb9f80409deb9488ad38d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  song_Change_Interval: 1
+  Max_Volume: 0.1
+  themeParent: {fileID: 154731871}
+  soundParent: {fileID: 205678936}
 --- !u!1001 &1149694189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21135,9 +21166,6 @@ MonoBehaviour:
   level_Speed: 5
   cam_Travel_Time: 2
   sectionDistance: 200
-  Max_Volume: 0.1
-  song_Change_Interval: 0.52
-  themeParent: {fileID: 154731871}
   cameraPositions: {fileID: 180758533}
   camPosition: 0
 --- !u!1 &1921304565
