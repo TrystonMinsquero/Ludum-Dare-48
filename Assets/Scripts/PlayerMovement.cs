@@ -125,6 +125,7 @@ public class PlayerMovement : MonoBehaviour
             if (playerMovement.y > 0 && grounded)
             {
                 //Debug.Log("Jump");
+                SoundManager.playSound(SoundManager.jump);
                 grounded = false;
                 rb.velocity = new Vector2(rb.velocity.x, moveSpeed * 2);
             }
@@ -268,6 +269,7 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Disable();
         splat = true;
+        SoundManager.playSound(SoundManager.splat);
         StartCoroutine(player.DieAfterTime(4));
         
     }

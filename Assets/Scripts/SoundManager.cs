@@ -146,10 +146,10 @@ public class SoundManager : MonoBehaviour
         currentSong = song;
     }
 
-    /*
+    
     public static IEnumerator playDeath()
     {
-        // sound = death
+        AudioSource sound = death;
         for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
         {
             if (currentSong != null && currentSong.volume > 0)
@@ -166,8 +166,7 @@ public class SoundManager : MonoBehaviour
             sound.volume = maxVolume;
         }
 
-        currentSong = sound;
-    }*/
+    }
 
     //Add Method to play each sound here
 

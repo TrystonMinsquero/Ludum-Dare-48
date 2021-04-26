@@ -79,6 +79,7 @@ public class GemScript : MonoBehaviour
         if(collision.CompareTag("Player"))
         {
             DataControl.money += gemValue;
+            SoundManager.playSound(SoundManager.gemPickup);
             Destroy(gameObject);
         }
     }
