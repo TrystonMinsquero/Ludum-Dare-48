@@ -5268,6 +5268,9 @@ MonoBehaviour:
   bubbleAnim: {fileID: 618448216}
   timeChargeAnim: {fileID: 2015767289}
   speechBubble: {fileID: 461777708}
+  suitPrice: {fileID: 0}
+  bubblePrice: {fileID: 0}
+  timeChargePrice: {fileID: 0}
   suitMaxed: {fileID: 1411514433}
   upgradeSuit: {fileID: 1921304567}
   bubbleMaxed: {fileID: 1195256927}

@@ -13,6 +13,10 @@ public class Shop : MonoBehaviour
 
     public Text speechBubble;
 
+    public Text suitPrice;
+    public Text bubblePrice;
+    public Text timeChargePrice;
+
     public Image suitMaxed;
     public Button upgradeSuit;
    
@@ -39,8 +43,13 @@ public class Shop : MonoBehaviour
             upgradeSuit.gameObject.SetActive(false);
 
         }
-        
-        
+
+        suitPrice.text = DataControl.suitCost.ToString();
+        bubblePrice.text = DataControl.bubbleCost.ToString();
+        timeChargePrice.text = DataControl.timeSlowCost.ToString();
+
+
+
     }
     public void buySuit()
     {
