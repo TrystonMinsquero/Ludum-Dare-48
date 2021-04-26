@@ -19,8 +19,10 @@ public class Shop : MonoBehaviour
 
     public Image suitMaxed;
     public Button upgradeSuit;
-   
 
+    public Sprite suit1;
+    public Sprite soldOut;
+    
     public Image bubbleMaxed;
     public Button upgradeBubble;
 
@@ -37,10 +39,17 @@ public class Shop : MonoBehaviour
     }
     private void Update()
     {
+        if(DataControl.suitLevel == 1)
+        {
+            upgradeSuit.GetComponent<Image>().sprite = suit1;
+        }
         if (DataControl.suitLevel >= 2)
         {
-            suitMaxed.gameObject.SetActive(true);
-            upgradeSuit.gameObject.SetActive(false);
+            //;suitMaxed.gameObject.SetActive(true);
+            //upgradeSuit.gameObject.SetActive(false);
+            //upgradeSuit.GetComponentInChildren<Text>().text = "Suit Maxed!";
+
+            upgradeSuit.GetComponent<Image>().sprite = soldOut;
 
         }
 
