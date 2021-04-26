@@ -107,7 +107,7 @@ public class Shop : MonoBehaviour
             DataControl.money -= bubbleCost;
             DataControl.bubbles = true;
 
-            LevelManager.player.GetComponent<PlayerMovement>().GiveBubble();
+            LevelManager.player.GetComponent<Player>().GiveBubble();
 
             Debug.Log(DataControl.bubbles + "\n" + DataControl.money);
         }

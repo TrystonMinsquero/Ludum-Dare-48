@@ -31,6 +31,7 @@ public class LevelManager : MonoBehaviour
 
     public static bool falling;
     public static bool timeSlowed;
+    public static bool readyToDie;
 
     Rigidbody2D rb;
 
@@ -99,8 +100,6 @@ public class LevelManager : MonoBehaviour
         distanceTraveled = rb.position.y;
 
 
-        if ((int)levelSection > DataControl.suitLevel + 1)
-            StartCoroutine(player.GetComponent<PlayerMovement>().Burnout());
 
         if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE)
         {
@@ -122,6 +121,10 @@ public class LevelManager : MonoBehaviour
                 GameObject.Find("Temp Walls").SetActive(false);
                 break;
         }
+
+        
+        if ((int)levelSection > DataControl.suitLevel + 1)
+            player.GetComponent<Player>().StartBurnout();
     }
 
     public static void ChangeCameraPosition(CameraPosition cameraPosition)

@@ -103,9 +103,12 @@ public class SoundManager : MonoBehaviour
 
     public static IEnumerator TransitionToSong(AudioSource song)
     {
+
+        if (LevelManager.player.GetComponent<Player>().isDying)
+            yield break;
+
         if (currentSong != null)
             currentSong.loop = false;
-
 
         if (song != null)
         {
@@ -165,7 +168,10 @@ public class SoundManager : MonoBehaviour
         {
             sound.volume = maxVolume;
         }
-
+        currentSong = sound;
+        while (currentSong.isPlaying)
+            yield return null;
+        LevelManager.readyToDie = true;
     }
 
     //Add Method to play each sound here
