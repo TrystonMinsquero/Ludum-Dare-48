@@ -73,6 +73,7 @@ public class Shop : MonoBehaviour
     {
         if (DataControl.money >= suitCost && DataControl.suitLevel < 2)
         {
+            SoundManager.playSound(SoundManager.buyItem);
             DataControl.money -= suitCost;
             DataControl.suitLevel++;
 
@@ -102,6 +103,7 @@ public class Shop : MonoBehaviour
     {
         if (DataControl.money >= bubbleCost && !DataControl.bubbles)
         {
+            SoundManager.playSound(SoundManager.buyItem);
             DataControl.money -= bubbleCost;
             DataControl.bubbles = true;
 
@@ -127,6 +129,7 @@ public class Shop : MonoBehaviour
     {
         if (DataControl.money >= timeSlowCost && DataControl.timeSlows < timeSlowMax)
         {
+            SoundManager.playSound(SoundManager.buyItem);
             DataControl.money -= timeSlowCost;
             DataControl.timeSlows++;
 
