@@ -19,6 +19,8 @@ public class Shop : MonoBehaviour
 
     public Image bubbleMaxed;
     public Button upgradeBubble;
+
+    public Transform exitShopLocation;
     
 
    
@@ -59,6 +61,7 @@ public class Shop : MonoBehaviour
     {
         SoundManager.playSound(SoundManager.hoverItem);
 
+        
         speechBubble.text = "Upgrade your suit to help you survive deeper depths!";
         //Debug.Log("HOVERING SUIT!!");
     }
@@ -127,6 +130,11 @@ public class Shop : MonoBehaviour
             shopUI.SetActive(true);
             LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
         }
+    }
+    public void exitShop()
+    {
+        LevelManager.player.transform.position = exitShopLocation.position;
+        shopUI.SetActive(false);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
