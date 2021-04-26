@@ -1,25 +1,19 @@
 fileFormatVersion: 2
-guid: 16c875568947e594e92c95a245b19c84
+guid: 716c527d00d99d84685516115cd4c849
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4080278737599844964
-    second: Gem_0
+      213: 4078796110908485188
+    second: Bubbles_0
   - first:
-      213: -2890370699262637217
-    second: Gem_1
+      213: -7938878928584171511
+    second: Bubbles_1
   - first:
-      213: 4851056643655978520
-    second: Gem_2
+      213: -5417141958962910980
+    second: Bubbles_2
   - first:
-      213: 5640320162214436903
-    second: Gem_3
-  - first:
-      213: 7912342951494990934
-    second: Gem_4
-  - first:
-      213: -9094624415417260982
-    second: Gem_5
+      213: 5179279333322180978
+    second: Bubbles_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -82,7 +76,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -94,7 +88,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -106,7 +100,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -118,7 +112,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -129,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gem_0
+      name: Bubbles_0
       rect:
         serializedVersion: 2
         x: 0
@@ -143,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9d28cc3b10ff57c0800000000000000
-      internalID: -4080278737599844964
+      spriteID: 44ee1f5d37bca9830800000000000000
+      internalID: 4078796110908485188
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gem_1
+      name: Bubbles_1
       rect:
         serializedVersion: 2
         x: 32
@@ -164,35 +158,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5bc041b92753e7d0800000000000000
-      internalID: -2890370699262637217
+      spriteID: 90028ea2daf63d190800000000000000
+      internalID: -7938878928584171511
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gem_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81ec96eb05a625340800000000000000
-      internalID: 4851056643655978520
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gem_3
+      name: Bubbles_2
       rect:
         serializedVersion: 2
         x: 0
@@ -206,14 +179,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 720e348cd41764e40800000000000000
-      internalID: 5640320162214436903
+      spriteID: cf8e62ee61272d4b0800000000000000
+      internalID: -5417141958962910980
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gem_4
+      name: Bubbles_3
       rect:
         serializedVersion: 2
         x: 32
@@ -227,29 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65cbce43ef94ecd60800000000000000
-      internalID: 7912342951494990934
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gem_5
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a44a571974769c180800000000000000
-      internalID: -9094624415417260982
+      spriteID: 279c037dc1f70e740800000000000000
+      internalID: 5179279333322180978
       vertices: []
       indices: 
       edges: []
