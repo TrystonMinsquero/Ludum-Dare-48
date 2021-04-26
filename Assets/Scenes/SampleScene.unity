@@ -18393,7 +18393,7 @@ MonoBehaviour:
   moneyP: 50
   bubblesP: 0
   timeSlowsP: 0
-  suitLevelP: 0
+  suitLevelP: 2
 --- !u!4 &1434394402
 Transform:
   m_ObjectHideFlags: 0
