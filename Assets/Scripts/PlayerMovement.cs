@@ -8,10 +8,15 @@ public class PlayerMovement : MonoBehaviour
     public float scale = 1.5f;
     public float gravity = 2f;
 
+    public float upRotation = 80;
+    public float downHorizontalRotation = 25;
+    public float horizontalRotaion = 35;
+
 
     Controls controls;
     Rigidbody2D rb;
     BoxCollider2D bc;
+    Animator anim;
 
 
     bool facingRight;
@@ -27,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         controls.Enable();
         rb = this.GetComponent<Rigidbody2D>();
         bc = this.GetComponent<BoxCollider2D>();
+        anim = this.GetComponent<Animator>();
 
         rb.drag = drag;
         rb.gravityScale = gravity;
@@ -99,9 +105,6 @@ public class PlayerMovement : MonoBehaviour
 
                 //Check facing
                 facingRight = playerMovement.x > 0 ? true : false;
-                Vector3 scaleTemp = Vector3.one * scale;
-                scaleTemp.x = facingRight ? scale : -scale;
-                transform.localScale = scaleTemp;
 
             }
 
@@ -115,8 +118,68 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
+        CheckAnimation(playerMovement);
+
         onLeftWall = false;
         onRightWall = false;
+    }
+
+    public void CheckAnimation(Vector2 playerMovement)
+    {
+
+        string state = "Travis ";
+        if (falling)
+        {
+            //Check scalling
+            Vector3 scaleTemp = Vector3.one * scale;
+            scaleTemp.x = facingRight ? -scale : scale;
+            transform.localScale = scaleTemp;
+
+            float rotateValue = -1;
+
+            state += "Fall ";
+            //Horizontal Down
+            if(playerMovement.y < 0 && playerMovement.x != 0)
+            {
+                state += "Down";
+                rotateValue = downHorizontalRotation;
+            }
+            //Horizontal Only
+            if(playerMovement.y == 0 && playerMovement.x != 0)
+            {
+                state += "Direction";
+                rotateValue = downHorizontalRotation;
+            }
+            //Up
+            if (playerMovement.y > 0)
+            {
+                state += "Up";
+                rotateValue = upRotation;
+            }
+            //Down only
+            if (playerMovement.y < 0 && playerMovement.x == 0)
+            {
+                state += "Down";
+                rotateValue = 0;
+            }
+            if(playerMovement == Vector2.zero)
+            {
+                state += "Idle";
+                rotateValue = 0;
+            }
+
+            if (rotateValue < 0)
+                Debug.Log("You fucked up");
+
+            rotateValue *= facingRight ? 1 : -1;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateValue));
+            
+        }
+
+
+        state += "_" + DataControl.suitLevel;
+
+        anim.Play(state);
     }
 
     private IEnumerator Flash(float duration, float stunInterval = .2f)
