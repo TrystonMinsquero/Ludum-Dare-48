@@ -5,11 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - Wall
   - Left Wall
   - Right Wall
   - Transition
-  - Ceiling
   - Obstacle
   layers:
   - Default
