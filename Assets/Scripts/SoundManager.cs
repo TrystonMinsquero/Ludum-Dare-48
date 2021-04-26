@@ -17,6 +17,36 @@ public class SoundManager : MonoBehaviour
     public GameObject soundParent;
 
     //Add all sound variables and their static counterpart
+    public static AudioSource death;
+    public AudioSource _death;
+
+    public static AudioSource buyItem;
+    public AudioSource _buyItem;
+
+    public static AudioSource gemPickup;
+    public AudioSource _gemPickup;
+
+    public static AudioSource hoverItem;
+    public AudioSource _hoverItem;
+
+    public static AudioSource jump;
+    public AudioSource _jump;
+
+    public static AudioSource notEnoughGems;
+    public AudioSource _notEnoughGems;
+
+    public static AudioSource splat;
+    public AudioSource _splat;
+
+    public static AudioSource suitCatchFire;
+    public AudioSource _suitCatchFire;
+
+    public static AudioSource useTimeDischarge;
+    public AudioSource _useTimeDischarge;
+
+    public static AudioSource fishVictory;
+    public AudioSource _fishVictory;
+
 
     public static AudioSource[] themes;
     public static AudioSource currentSong;
@@ -35,6 +65,16 @@ public class SoundManager : MonoBehaviour
         songChangeInterval = song_Change_Interval;
 
         //set up static variables
+        death = _death;
+        buyItem = _buyItem;
+        gemPickup = _gemPickup;
+        hoverItem = _hoverItem;
+        jump = _jump;
+        notEnoughGems = _notEnoughGems;
+        splat = _splat;
+        suitCatchFire = _suitCatchFire;
+        useTimeDischarge = _useTimeDischarge;
+        fishVictory = _fishVictory;
 
         themes = themeParent.GetComponentsInChildren<AudioSource>();
         

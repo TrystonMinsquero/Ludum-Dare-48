@@ -18417,6 +18417,16 @@ MonoBehaviour:
   Max_Volume: 0.1
   themeParent: {fileID: 154731871}
   soundParent: {fileID: 205678936}
+  _death: {fileID: 1175796969}
+  _buyItem: {fileID: 1583288970}
+  _gemPickup: {fileID: 147824383}
+  _hoverItem: {fileID: 2136844244}
+  _jump: {fileID: 1069421151}
+  _notEnoughGems: {fileID: 1880611141}
+  _splat: {fileID: 290867709}
+  _suitCatchFire: {fileID: 515007693}
+  _useTimeDischarge: {fileID: 2128703094}
+  _fishVictory: {fileID: 390238626}
 --- !u!1001 &1149694189
 PrefabInstance:
   m_ObjectHideFlags: 0

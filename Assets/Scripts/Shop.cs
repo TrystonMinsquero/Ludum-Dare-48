@@ -87,6 +87,7 @@ public class Shop : MonoBehaviour
     }
     public void hoverSuit()
     {
+        SoundManager.playSound(SoundManager.hoverItem);
         defaultText.gameObject.SetActive(false);
         hoverSuitText.gameObject.SetActive(true);
         Debug.Log("HOVERING SUIT!!");
@@ -111,6 +112,7 @@ public class Shop : MonoBehaviour
     }
     public void hoverBubble()
     {
+        SoundManager.playSound(SoundManager.hoverItem);
         defaultText.gameObject.SetActive(false);
         hoverBubbleText.gameObject.SetActive(true);
         Debug.Log("HOVERING BUBBLE!!");
@@ -133,6 +135,7 @@ public class Shop : MonoBehaviour
     }
     public void hoverTimeSlow()
     {
+        SoundManager.playSound(SoundManager.hoverItem);
         defaultText.gameObject.SetActive(false);
         hoverTimeSlowText.gameObject.SetActive(true);
         Debug.Log("HOVERING TIME CHARGE!!");
