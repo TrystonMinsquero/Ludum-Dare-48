@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     SpriteRenderer sr;
     SpriteRenderer bubble;
 
-    public float fadeOutDuration = 2.5f;
-    public float timeUntilFade = 3f;
+    public float fadeOutDuration = 1f;
+    public float timeUntilFade = 1f;
 
     [System.NonSerialized]
     public bool hasBubble;
@@ -43,18 +43,20 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(time);
         while (!LevelManager.readyToDie)
             yield return null;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        LevelManager.ResetScene();
     }
 
 
     public IEnumerator Die()
     {
+        StartCoroutine(SoundManager.TransitionToSong(null));
         isDying = true;
-        Debug.Log("Start dying music");
-        StartCoroutine(SoundManager.playDeath());
+        SoundManager.playSound(SoundManager.death);
         Debug.Log("Waiting for music to finish");
         while (!LevelManager.readyToDie)
             yield return null;
+
+
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
@@ -73,7 +75,6 @@ public class Player : MonoBehaviour
     {
         StartCoroutine(SoundManager.TransitionToSong(null));
         isDying = true;
-        Debug.Log("Start smoke");
         SoundManager.playSound(SoundManager.suitCatchFire);
         SoundManager.playSound(SoundManager.death);
         smoke.Play();
@@ -91,8 +92,10 @@ public class Player : MonoBehaviour
         }
         Debug.Log("Start Final words");
         smoke.Stop();
+        while (smoke.IsAlive())
+            yield return null;
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        LevelManager.ResetScene();
     }
 
 

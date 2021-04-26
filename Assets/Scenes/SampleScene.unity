@@ -1770,17 +1770,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d68c1838fa2c8a43901f0298a461315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suitCostP: 10
-  bubbleCostP: 5
-  bubbleMaxP: 1
-  timeSlowCostP: 5
-  timeSlowMaxP: 99
-  time_Charge_Duration: 3
-  speed_Reduction: 0.5
   shopUI: {fileID: 237637380}
   suitAnim: {fileID: 0}
-  bubbleAnim: {fileID: 618448216}
-  timeChargeAnim: {fileID: 2015767289}
+  bubbleAnim: {fileID: 0}
+  timeChargeAnim: {fileID: 0}
   speechBubble: {fileID: 461777708}
   suitMaxed: {fileID: 1411514433}
   upgradeSuit: {fileID: 1921304567}
@@ -17717,6 +17710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5dbbf07421efaf47ada32de658842b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeOutDuration: 1
+  timeUntilFade: 1
 --- !u!1001 &1024494016
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19378,6 +19373,13 @@ MonoBehaviour:
   bubblesP: 0
   timeSlowsP: 0
   suitLevelP: 0
+  suitCostP: 0
+  bubbleCostP: 0
+  bubbleMaxP: 0
+  timeSlowCostP: 0
+  timeSlowMaxP: 0
+  time_Charge_Duration: 3
+  speed_Reduction: 0.5
 --- !u!4 &1434394402
 Transform:
   m_ObjectHideFlags: 0

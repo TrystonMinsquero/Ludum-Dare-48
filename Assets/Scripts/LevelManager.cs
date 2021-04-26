@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -142,7 +143,10 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(SoundManager.TransitionToSong(song));
     }
 
-
+    public static void ResetScene()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
 
 public enum CameraPosition
