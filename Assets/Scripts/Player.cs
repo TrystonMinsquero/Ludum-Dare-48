@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
         {
             Color newAlpha = sr.color;
             newAlpha.a -= Time.deltaTime / fadeOutDuration;
+
             sr.color = newAlpha;
             yield return null;
         }

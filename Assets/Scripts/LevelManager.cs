@@ -26,7 +26,6 @@ public class LevelManager : MonoBehaviour
     public static Transform[] camPositions;
 
     public static float distanceTraveled;
-    public static bool transition;
     public static int maxDifficulty;
     public static float levelSpeed;
 
@@ -55,7 +54,6 @@ public class LevelManager : MonoBehaviour
         camPosition = CameraPosition.INITIAL;
         maxDifficulty = 1;
         falling = false;
-        transition = false;
 
 
         rb = this.GetComponent<Rigidbody2D>();
@@ -97,43 +95,52 @@ public class LevelManager : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(levelSection != LevelSection.GROUND && levelSection != LevelSection.BOTTOM)
+        if(levelSection != LevelSection.GROUND && levelSection != LevelSection.VOID)
             rb.velocity = new Vector2(0, levelSpeed);
 
 
 
         distanceTraveled = rb.position.y;
 
-
-
-        if (distanceTraveled >= sectionDistance && levelSection < LevelSection.MANTLE || 
-            distanceTraveled >= sectionDistance * 2 && levelSection < LevelSection.CORE || 
-            distanceTraveled >= sectionDistance * 3 && levelSection < LevelSection.BOTTOM)
+        if (LevelGenerator.sectionsGenerated * 10 >= sectionDistance && LevelGenerator.levelSection + 1 == LevelSection.MANTLE ||
+            LevelGenerator.sectionsGenerated * 10 >= sectionDistance * 2 && LevelGenerator.levelSection + 1 == LevelSection.CORE ||
+            LevelGenerator.sectionsGenerated * 10 >= sectionDistance * 3 && LevelGenerator.levelSection + 1 == LevelSection.VOID)
         {
-            transition = true;
-            maxDifficulty++;
-            NextLevelSection();
-            StartCoroutine(PlayThemeAfterTime(SoundManager.timeUntilSongPlay));
-            
+            Debug.Log("Generating Transition from " + LevelGenerator.levelSection + " to " + LevelGenerator.levelSection + 1);
+            //Debug.Log("Level Generator Section is " + LevelGenerator.levelSection);
+            //Debug.Log("Level Manager Section is " + levelSection);
+            LevelGenerator.GenerateTransitionSegment();
         }
     }
 
     public static void NextLevelSection()
     {
+        
         levelSection++;
-        switch(levelSection)
+        LevelGenerator.levelSection = levelSection;
+        Debug.Log("Level chaninging to " + levelSection);
+        switch (levelSection)
         {
             case LevelSection.CRUST:
                 ChangeCameraPosition(CameraPosition.GAME);
-                GameObject.Find("Temp Walls").SetActive(false);
+                walls.SetActive(true);
+                falling = true;
+                Destroy(GameObject.Find("Temp Walls"));
                 break;
-            case LevelSection.BOTTOM:
+            case LevelSection.MANTLE:
+                maxDifficulty++;
                 break;
-
+            case LevelSection.CORE:
+                maxDifficulty++;
+                break;
+            case LevelSection.VOID:
+                break;
+            case LevelSection.VICTORY:
+                GameObject.Find("End Canvas").GetComponent<Canvas>().enabled = true;
+                break;
         }
 
-        
-        if ((int)levelSection > DataControl.suitLevel + 1 && levelSection != LevelSection.BOTTOM)
+        if ((int)levelSection > DataControl.suitLevel + 1 && levelSection >= LevelSection.VOID)
             player.GetComponent<Player>().StartBurnout();
     }
 

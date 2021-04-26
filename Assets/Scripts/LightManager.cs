@@ -31,7 +31,7 @@ public class LightManager : MonoBehaviour
             case LevelSection.CORE:
                 headLight.intensity = coreLight;
                 break;
-            case LevelSection.BOTTOM:
+            case LevelSection.VOID:
                 headLight.intensity = voidLight;
                 break;
         }
