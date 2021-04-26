@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
             if(!LevelManager.timeSlowed && controls.Gameplay.SlowTime.ReadValue<float>() > 0 && DataControl.timeSlows > 0)
             {
                 DataControl.timeSlows--;
-                StartCoroutine(LevelManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
+                StartCoroutine(SoundManager.SlowTime(Shop.timeChargeDuration, Shop.speedReduction));
             }
                 
 
@@ -268,7 +268,7 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Disable();
         splat = true;
-        player.DieAfterTime(4);
+        StartCoroutine(player.DieAfterTime(4));
         
     }
 
@@ -363,7 +363,7 @@ public class PlayerMovement : MonoBehaviour
             LevelManager.NextLevelSection();
             LevelManager.walls.SetActive(true);
             LevelManager.falling = true;
-            StartCoroutine(LevelManager.transitionToSong(LevelManager.themes[(int)LevelManager.levelSection]));
+            StartCoroutine(SoundManager.TransitionToSong(SoundManager.themes[(int)LevelManager.levelSection]));
         }
 
 

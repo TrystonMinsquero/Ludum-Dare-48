@@ -8,10 +8,6 @@ public class LevelManager : MonoBehaviour
     public float level_Speed = 5f;
     public float cam_Travel_Time = 2f;
     public float sectionDistance = 200f;
-    public float Max_Volume = .1f;
-    private float timeUntilSongPlay = 1f;
-    public float song_Change_Interval = 1f;
-    public GameObject themeParent;
     public static GameObject player;
 
 
@@ -31,12 +27,7 @@ public class LevelManager : MonoBehaviour
     public static float distanceTraveled;
     public static bool transition;
     public static int maxDifficulty = 1;
-    private static float maxVolume;
-    public static float songChangeInterval;
     public static float levelSpeed;
-
-    public static AudioSource[] themes;
-    public static AudioSource currentSong;
 
     public static bool falling;
     public static bool timeSlowed;
@@ -52,8 +43,6 @@ public class LevelManager : MonoBehaviour
 
 
         camTravelTime = cam_Travel_Time;
-        maxVolume = Max_Volume;
-        songChangeInterval = song_Change_Interval;
         levelSpeed = level_Speed;
 
         player = GameObject.Find("Travis");
@@ -62,10 +51,6 @@ public class LevelManager : MonoBehaviour
         walls.SetActive(false);
         camPositions = sortCamPositions(cameraPositions.GetComponentsInChildren<Transform>());
 
-        themes = themeParent.GetComponentsInChildren<AudioSource>();
-
-        foreach (AudioSource theme in themes)
-            theme.volume = 0;
 
 
         rb = this.GetComponent<Rigidbody2D>();
@@ -75,13 +60,11 @@ public class LevelManager : MonoBehaviour
         cam.GetComponent<Rigidbody2D>().gravityScale = 0;
         cam.GetComponent<Rigidbody2D>().isKinematic = true;
 
-        StartCoroutine(transitionToSong(themes[0]));
     }
 
     public void Start()
     {
 
-        timeUntilSongPlay = (LevelGenerator.distanceToPlace - 10) / levelSpeed;
     }
 
     private Transform[] sortCamPositions(Transform[] positions)
@@ -124,7 +107,7 @@ public class LevelManager : MonoBehaviour
             transition = true;
             maxDifficulty++;
             NextLevelSection();
-            StartCoroutine(PlayAfterTime(timeUntilSongPlay));
+            StartCoroutine(PlayThemeAfterTime(SoundManager.timeUntilSongPlay));
             
         }
     }
@@ -149,117 +132,13 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    public static IEnumerator SlowTime(float duration, float slowFactor)
-    {
-        levelSpeed = levelSpeed * slowFactor;
-        currentSong.pitch = .5f;
-        timeSlowed = true;
-        for (float i = duration; i > 0; i -= Time.deltaTime)
-            yield return null;
-        timeSlowed = false;
-        levelSpeed = levelSpeed / slowFactor;
-        currentSong.pitch = 1;
-
-    }
-
-
-    public static IEnumerator transitionToSong(AudioSource song)
-    {
-        if (currentSong != null)
-            currentSong.loop = false;
-
-        
-        if(song != null)
-        {
-            if(song != themes[(int)LevelSection.MANTLE])
-                song.loop = true;
-            song.Play();
-        }
-        
-
-        for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
-        {
-            if (currentSong != null && currentSong.volume > 0)
-                currentSong.volume -= Time.deltaTime * maxVolume;
-            if (song != null && song.volume < maxVolume)
-                song.volume += Time.deltaTime * maxVolume;
-            yield return null;
-        }
-        if(currentSong != null)
-            currentSong.volume = 0;
-        if (song != null)
-        {
-            song.volume = maxVolume;
-            if(song == themes[(int)LevelSection.MANTLE])
-            {
-                while (song.isPlaying)
-                {
-                    yield return null;
-                }
-                song.volume = 0;
-                song.loop = false;
-                song = themes[(int)LevelSection.MANTLE + 1];
-                song.volume = maxVolume;
-                song.loop = true;
-                song.Play();
-            }
-        }
-
-        currentSong = song;
-    }
-
-    public static IEnumerator transitionToSound(AudioSource song)
-    {
-        if (currentSong != null)
-            currentSong.loop = false;
-
-
-        if (song != null)
-        {
-            if (song != themes[(int)LevelSection.MANTLE])
-                song.loop = true;
-            song.Play();
-        }
-
-
-        for (float i = songChangeInterval; i >= 0; i -= Time.deltaTime)
-        {
-            if (currentSong != null && currentSong.volume > 0)
-                currentSong.volume -= Time.deltaTime * maxVolume;
-            if (song != null && song.volume < maxVolume)
-                song.volume += Time.deltaTime * maxVolume;
-            yield return null;
-        }
-        
-        if (currentSong != null)
-            currentSong.volume = 0;
-        if (song != null)
-        {
-            song.volume = maxVolume;
-            if (song == themes[(int)LevelSection.MANTLE])
-            {
-                while (song.isPlaying)
-                {
-                    yield return null;
-                }
-                song.volume = 0;
-                song.loop = false;
-                song = themes[(int)LevelSection.MANTLE + 1];
-                song.volume = maxVolume;
-                song.loop = true;
-                song.Play();
-            }
-        }
-
-        currentSong = song;
-    }
-
-    IEnumerator PlayAfterTime(float time)
+    public IEnumerator PlayThemeAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        AudioSource song = levelSection > LevelSection.MANTLE ? themes[(int)levelSection + 1] : themes[(int)levelSection];
-        StartCoroutine(transitionToSong(song));
+        AudioSource song = LevelManager.levelSection > LevelSection.MANTLE ? SoundManager.themes[(int)levelSection + 1] : SoundManager.themes[(int)levelSection];
+        StartCoroutine(SoundManager.TransitionToSong(song));
     }
+
 
 }
 

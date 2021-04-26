@@ -8,9 +8,11 @@ public class Player : MonoBehaviour
 
     public IEnumerator DieAfterTime(float time)
     {
-        LevelManager.transitionToSong(death);
+        Debug.Log("Death");
+        SoundManager.TransitionToSong(death);
         yield return new WaitForSeconds(time);
-        while (LevelManager.currentSong.isPlaying)
+        Debug.Log("stuck?");
+        while (SoundManager.currentSong.isPlaying)
             yield return null;
         Die();
     }
