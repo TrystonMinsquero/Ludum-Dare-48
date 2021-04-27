@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
         SoundManager.playSound(SoundManager.suitCatchFire);
         SoundManager.playSound(SoundManager.death);
         smoke.Play();
+        PopBubble(false);
         for (float i = timeUntilFade; i >= 0; i -= Time.deltaTime)
             yield return null;
         bc.enabled = false;
@@ -107,10 +108,12 @@ public class Player : MonoBehaviour
         bubble.enabled = true;
     }
 
-    public void PopBubble()
+    public void PopBubble(bool playSound = true)
     {
         bubble.enabled = false;
         DataControl.bubbles = false;
+        if (playSound)
+            SoundManager.playSound(SoundManager.bubblePop);
         StartCoroutine(Flash(1.5f));
     }
 
