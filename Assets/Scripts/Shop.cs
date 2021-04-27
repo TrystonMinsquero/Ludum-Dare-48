@@ -154,6 +154,7 @@ public class Shop : MonoBehaviour
         LevelManager.player.transform.position = exitShopLocation.position;
         LevelManager.ChangeCameraPosition(CameraPosition.INITIAL);
         shopUI.SetActive(false);
+        Debug.Log("Exiting shop");
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
