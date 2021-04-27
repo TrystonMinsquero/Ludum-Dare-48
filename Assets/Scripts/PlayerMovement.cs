@@ -53,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
             float minPlayerHeight = LevelManager.cam.transform.position.y - LevelManager.cam.GetComponent<Camera>().orthographicSize + this.GetComponent<BoxCollider2D>().size.y / 2;
             float maxPlayerHeight = LevelManager.cam.transform.position.y + LevelManager.cam.GetComponent<Camera>().orthographicSize - this.GetComponent<BoxCollider2D>().size.y / 2;
+            float maxPlayerWidth = LevelManager.cam.transform.position.x + LevelManager.cam.GetComponent<Camera>().orthographicSize * LevelManager.cam.GetComponent<Camera>().aspect - this.GetComponent<BoxCollider2D>().size.y / 2;
+            float minPlayerWidth = LevelManager.cam.transform.position.x - LevelManager.cam.GetComponent<Camera>().orthographicSize * LevelManager.cam.GetComponent<Camera>().aspect + this.GetComponent<BoxCollider2D>().size.y / 2;
             //Directional movement
             if (playerMovement != Vector2.zero)
             {
@@ -60,7 +62,33 @@ public class PlayerMovement : MonoBehaviour
                 Vector2 vel = rb.velocity;
 
                 //Check x velocity
-                if (playerMovement.x != 0 && (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall))
+
+                switch (LevelManager.CAM_POSITION)
+                {
+                    case CameraPosition.INITIAL:
+                        //ChangeCameraSize(startSize);
+                        if (transform.position.x > maxPlayerWidth)
+                        {
+                            LevelManager.ChangeCameraPosition(CameraPosition.SHOP_OUTSIDE);
+                            controls.Enable();
+                        }
+                        break;
+                    case CameraPosition.SHOP:
+                        //ChangeCameraSize(shopSize);
+                        controls.Disable();
+                        break;
+                    case CameraPosition.GAME:
+                        //ChangeCameraSize(gameSize);
+                        break;
+                    case CameraPosition.SHOP_OUTSIDE:
+                        if (transform.position.x < minPlayerWidth)
+                        {
+                            LevelManager.ChangeCameraPosition(CameraPosition.INITIAL);
+                            controls.Enable();
+                        }
+                        break;
+                }
+                if (playerMovement.x != 0 && CameraPosition.GAME == LevelManager.CAM_POSITION && (transform.position.x < maxPlayerWidth && playerMovement.x <= 0 || transform.position.x > minPlayerWidth && playerMovement.x >= 0) && (playerMovement.x > 0 && !onRightWall || playerMovement.x < 0 && !onLeftWall))
                     vel.x = playerMovement.x * moveSpeed;
 
                 //Check y velocity

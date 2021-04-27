@@ -41,7 +41,6 @@ public class LevelManager : MonoBehaviour
         else
             instance = this;
 
-
         camTravelTime = cam_Travel_Time;
         levelSpeed = level_Speed;
 
@@ -88,6 +87,9 @@ public class LevelManager : MonoBehaviour
                     break;
                 case "Game":
                     temp[(int)CameraPosition.GAME] = position;
+                    break;
+                case "Shop Outside":
+                    temp[(int)CameraPosition.SHOP_OUTSIDE] = position;
                     break;
             }
         }
@@ -158,10 +160,15 @@ public class LevelManager : MonoBehaviour
             case CameraPosition.SHOP:
                 //ChangeCameraSize(shopSize);
                 cam.transform.position = camPositions[(int)CameraPosition.SHOP].position;
+                player.GetComponent<PlayerMovement>().controls.Disable();
                 break;
             case CameraPosition.GAME:
                 //ChangeCameraSize(gameSize);
                 cam.transform.position = camPositions[(int)CameraPosition.GAME].position;
+                break;
+            case CameraPosition.SHOP_OUTSIDE:
+                cam.transform.position = camPositions[(int)CameraPosition.SHOP_OUTSIDE].position;
+                player.GetComponent<PlayerMovement>().controls.Enable();
                 break;
         }
         Vector3 vel = cam.GetComponent<Rigidbody2D>().velocity;
@@ -193,6 +200,7 @@ public enum CameraPosition
 {
     INITIAL,
     SHOP,
-    GAME
+    GAME,
+    SHOP_OUTSIDE
 
 }
