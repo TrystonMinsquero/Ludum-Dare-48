@@ -49,7 +49,7 @@ public class Shop : MonoBehaviour
             //upgradeSuit.gameObject.SetActive(false);
             //upgradeSuit.GetComponentInChildren<Text>().text = "Suit Maxed!";
 
-            upgradeSuit.GetComponent<Image>().sprite = soldOut;
+            upgradeSuit.gameObject.SetActive(false);
 
         }
 
