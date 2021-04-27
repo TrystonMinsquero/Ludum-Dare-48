@@ -186,7 +186,8 @@ public class SoundManager : MonoBehaviour
 
     public static AudioSource playSound(AudioSource sound)
     {
-        sound.Play();
+        if(sound != null)
+            sound.Play();
         return sound;
     }
 
