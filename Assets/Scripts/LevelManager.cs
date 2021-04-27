@@ -156,6 +156,7 @@ public class LevelManager : MonoBehaviour
             case CameraPosition.INITIAL:
                 //ChangeCameraSize(startSize);
                 cam.transform.position = camPositions[(int)CameraPosition.INITIAL].position;
+                player.GetComponent<PlayerMovement>().controls.Enable();
                 break;
             case CameraPosition.SHOP:
                 //ChangeCameraSize(shopSize);
