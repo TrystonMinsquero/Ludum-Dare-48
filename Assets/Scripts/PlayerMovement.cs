@@ -51,8 +51,8 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = 0;
 
-            float minPlayerHeight = LevelManager.cam.transform.position.y - 5 + this.GetComponent<BoxCollider2D>().size.y / 2;
-            float maxPlayerHeight = LevelManager.cam.transform.position.y + 5 - this.GetComponent<BoxCollider2D>().size.y / 2;
+            float minPlayerHeight = LevelManager.cam.transform.position.y - LevelManager.cam.GetComponent<Camera>().orthographicSize + this.GetComponent<BoxCollider2D>().size.y / 2;
+            float maxPlayerHeight = LevelManager.cam.transform.position.y + LevelManager.cam.GetComponent<Camera>().orthographicSize - this.GetComponent<BoxCollider2D>().size.y / 2;
             //Directional movement
             if (playerMovement != Vector2.zero)
             {
@@ -266,8 +266,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (player.hasBubble)
                     player.PopBubble();
-                else
+                else if (!splat)
                     player.Splat();
+                else
+                    SoundManager.playSound(SoundManager.splat);
             }
 
         }
@@ -301,9 +303,9 @@ public class PlayerMovement : MonoBehaviour
             grounded = false;
 
             LevelManager.NextLevelSection();
-            LevelManager.walls.SetActive(true);
-            LevelManager.falling = true;
-            StartCoroutine(SoundManager.TransitionToSong(SoundManager.themes[(int)LevelManager.levelSection]));
+            AudioSource song = LevelManager.levelSection > LevelSection.MANTLE ? SoundManager.themes[(int)LevelManager.levelSection + 1] : SoundManager.themes[(int)LevelManager.levelSection];
+            StartCoroutine(SoundManager.TransitionToSong(song));
+            Destroy(collision.gameObject);
         }
 
 

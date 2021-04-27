@@ -13,12 +13,18 @@ public class Shop : MonoBehaviour
 
     public Text speechBubble;
 
+    public Text suitPrice;
+    public Text bubblePrice;
+    public Text timeChargePrice;
+
     public Image suitMaxed;
     public Button upgradeSuit;
    
 
     public Image bubbleMaxed;
     public Button upgradeBubble;
+
+    public Transform exitShopLocation;
     
 
    
@@ -37,8 +43,13 @@ public class Shop : MonoBehaviour
             upgradeSuit.gameObject.SetActive(false);
 
         }
-        
-        
+
+        suitPrice.text = DataControl.suitCost.ToString();
+        bubblePrice.text = DataControl.bubbleCost.ToString();
+        timeChargePrice.text = DataControl.timeSlowCost.ToString();
+
+
+
     }
     public void buySuit()
     {
@@ -59,6 +70,7 @@ public class Shop : MonoBehaviour
     {
         SoundManager.playSound(SoundManager.hoverItem);
 
+        
         speechBubble.text = "Upgrade your suit to help you survive deeper depths!";
         //Debug.Log("HOVERING SUIT!!");
     }
@@ -127,6 +139,11 @@ public class Shop : MonoBehaviour
             shopUI.SetActive(true);
             LevelManager.ChangeCameraPosition(CameraPosition.SHOP);
         }
+    }
+    public void exitShop()
+    {
+        LevelManager.player.transform.position = exitShopLocation.position;
+        shopUI.SetActive(false);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

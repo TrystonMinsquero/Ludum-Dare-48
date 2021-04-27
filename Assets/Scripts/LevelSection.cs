@@ -4,5 +4,6 @@
    CRUST,
    MANTLE,
    CORE,
-   BOTTOM
+   VOID,
+   VICTORY
 }

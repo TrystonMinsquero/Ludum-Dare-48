@@ -9,6 +9,7 @@ TagManager:
   - Right Wall
   - Transition
   - Obstacle
+  - TransitionVoid
   layers:
   - Default
   - TransparentFX

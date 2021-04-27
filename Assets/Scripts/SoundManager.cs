@@ -47,6 +47,8 @@ public class SoundManager : MonoBehaviour
     public static AudioSource fishVictory;
     public AudioSource _fishVictory;
 
+    public static AudioSource bubblePop;
+    public AudioSource _bubblePop;
 
     public static AudioSource[] themes;
     public static AudioSource currentSong;

@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030488, y: 140.2}
+  m_AnchoredPosition: {x: 0.000030488, y: 136.00012}
   m_SizeDelta: {x: 319.99994, y: 199.99988}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2641633448962589201
@@ -115,7 +115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030488, y: -30.546}
+  m_AnchoredPosition: {x: 0.000030488, y: -12.299877}
   m_SizeDelta: {x: 319.99994, y: 419.30838}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2641633449054928578
@@ -152,26 +152,46 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Game Development: Tryston Minsquero
+  m_Text: '-=Project Manager=-
+
+    Trystone Minsquero
 
 
+    -=Lead Programmer=-
 
-    Game Design: Michael Bettes
+    Tryston
+    Minsquero
+
+    -=Support Programmer=-
+
+    Michael Bettes
 
 
+    -=Lead Game Designer=-
 
-    Art:
+    Michael
+    Bettes
+
+
+    -=Lord of Art=-
+
     Joni Brooks
 
 
+    -=Sound Track=-
 
-    Muisic: Kameron Thrasher
+    Kameron
+    Thrasher
+
+    -=Sound Effects=-
+
+    Michael Bettes
 
 
 '
@@ -214,7 +234,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -0.049987793, y: -49}
-  m_SizeDelta: {x: 320, y: 480.4001}
+  m_SizeDelta: {x: 320, y: 550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2641633450106799870
 Canvas:
@@ -310,7 +330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030533, y: -30.54599}
+  m_AnchoredPosition: {x: -0.000030533, y: -215}
   m_SizeDelta: {x: 319.99994, y: 28.730164}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &731425166584258441
@@ -347,7 +367,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0

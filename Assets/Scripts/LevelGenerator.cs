@@ -9,24 +9,27 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("Modifers")]
     public int numOfDifficulties = 4;
-    public int creditPlaceDistance;
+    public int _creditPlaceDistance = 130;
     public static float rareChance = .2f;
 
     [Header("Prefabs")]
     public GameObject obstacle_Prefab;
     public GameObject gem_Prefab;
     public GameObject credits_Prefab;
+    public GameObject transition_Collider_Prefab;
+    public GameObject transition_Tile_Collider_Prefab;
 
     [Header("Deletion Points")]
-    public Transform[] environmentPoints = new Transform[2];
-    public Transform[] obstaclePoints = new Transform[2];
-    public Transform[] beginningPoints = new Transform[2];
+    public Transform[] clearTilesPoints = new Transform[2];
     public static GameObject groundFolder;
     public static GameObject obstacleFolder;
 
+    private static float creditsPlaceDistance;
     private static GameObject obstaclePrefab;
     private static GameObject gemPrefab;
     private static GameObject creditsPrefab;
+    private static GameObject transitionColliderPrefab;
+    private static GameObject transitionTileColliderPrefab;
 
     public static List<Texture2D[]> obstacleMaps;
     public static Texture2D[] foregroundMaps;
@@ -45,6 +48,8 @@ public class LevelGenerator : MonoBehaviour
     public static int sectionsGenerated = 0;
     public static int transitionIndex = 0;
     private bool generating;
+    private static bool transition;
+    public static LevelSection levelSection;
 
 private void Awake()
     {
@@ -63,6 +68,9 @@ private void Awake()
         gemPrefab = gem_Prefab;
         creditsPrefab = credits_Prefab;
         tileMaps = tile_Maps;
+        transitionColliderPrefab = transition_Collider_Prefab;
+        transitionTileColliderPrefab = transition_Tile_Collider_Prefab;
+        creditsPlaceDistance = _creditPlaceDistance;
 
 
         for (int i = 0; i < numOfDifficulties; i++)
@@ -78,12 +86,12 @@ private void Awake()
         transitionMaps = Resources.LoadAll<Texture2D>("Segments/Transitions");
         //Debug.Log("Transition maps loaded " + transitionMaps.Length + " maps");
 
-        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM; i++)
+        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.VOID; i++)
         {
             obstacleTiles.Add(null);
             environmentTiles.Add(null);
         }
-        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.BOTTOM / 2; i++)
+        for (int i = (int)LevelSection.GROUND; i < (int)LevelSection.VOID / 2; i++)
         {
             transitionTiles.Add(null);
         }
@@ -126,6 +134,8 @@ private void Awake()
         sectionsGenerated = 0;
         transitionIndex = 0;
         generating = true;
+        transition = false;
+        levelSection = LevelSection.GROUND;
 }
 
     void Start()
@@ -153,26 +163,22 @@ private void Awake()
         if (LevelManager.falling)
         {
             if(LevelManager.distanceTraveled - LevelManager.camHeight <= 35)
-            {
-                ClearRowOfTiles(beginningPoints[0].position, beginningPoints[1].position);
                 if(groundFolder != null)
                 {
                     Destroy(groundFolder);
                     groundFolder = null;
                 }
-            }
-            ClearRowOfTiles(environmentPoints[0].position, environmentPoints[1].position);
-            ClearRowOfTiles(obstaclePoints[0].position, obstaclePoints[1].position);
+            ClearRowOfTiles(clearTilesPoints[0].position, clearTilesPoints[1].position);
 
         }
 
         if (generating)
         {
-            if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0 && LevelManager.levelSection < LevelSection.BOTTOM)
+            if (LevelManager.distanceTraveled - sectionsGenerated * 10 > 0 && LevelManager.levelSection < LevelSection.VOID && !transition)
             {
                 GenerateSegment((int)UnityEngine.Random.Range(.9f, LevelManager.maxDifficulty + 1));
             }
-            else if (LevelManager.levelSection == LevelSection.BOTTOM && generating)
+            else if (LevelManager.levelSection == LevelSection.VOID && generating)
             {
                 GenerateCredits();
                 generating = false;
@@ -180,22 +186,31 @@ private void Awake()
         }
 
 
+
     }
 
-    public static void GenerateSegment(int difficulty)
+    public static void GenerateSegment(int difficulty, bool _transition = false)
     {
+        transition = _transition;
         //Debug.Log("Distance To Place = " + distanceToPlace);
         GenerateBackground(backgroundMaps[(int)UnityEngine.Random.Range(0, backgroundMaps.Length)]);
         GenerateFeedTape(foregroundMaps[(int)UnityEngine.Random.Range(0, foregroundMaps.Length)]);
         //(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)
-        if(LevelManager.transition)
+        if(transition)
             GenerateForeground(transitionMaps[0]);
         else
             GenerateForeground(obstacleMaps[difficulty][(int)UnityEngine.Random.Range(0, obstacleMaps[difficulty].Length)]);
+        transition = false;
         sectionsGenerated++;
-        if (LevelManager.transition)
-            LevelManager.transition = false;
     }
+
+    public static void GenerateTransitionSegment()
+    {
+        GenerateSegment(0, true);
+        sectionsGenerated--;
+        levelSection++;
+    }
+
 
     private static void GenerateForeground(Texture2D segment)
     {
@@ -204,7 +219,7 @@ private void Awake()
         {
             for (int y = 0; y < segment.height; y++)
             {
-                GenerateTile(segment, x, y, TileMapType.FOREGROUND);
+                GenerateTile(segment, x, y, TileMapType.OBSTACLES);
             }
         }
 
@@ -217,7 +232,7 @@ private void Awake()
         {
             for (int y = 0; y < segment.height; y++)
             {
-                GenerateTile(segment, x, y, TileMapType.FEEDTAPE);
+                GenerateTile(segment, x, y, TileMapType.FOREGROUND);
             }
         }
     }
@@ -239,9 +254,12 @@ private void Awake()
         
 
         Color pixelColor = map.GetPixel(x, y);
+        if (pixelColor.a == 0 || levelSection >= LevelSection.VOID)
+        { return; }
+
         Tilemap tileMap = tileMaps[(int)tileMapType];
 
-        Vector2 pos = tileMapType == TileMapType.FOREGROUND && !LevelManager.transition ? 
+        Vector2 pos = tileMapType == TileMapType.OBSTACLES && !transition ? 
             (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 5.5f
             : (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f + Vector2.left * 8.5f;
 
@@ -252,19 +270,17 @@ private void Awake()
             //Debug.Log(Vector2.one * pos);
         Vector3Int gridPos = tileMap.WorldToCell(pos);
 
-        if (pixelColor.a == 0)
-        { return; }
 
         ColorUtility.ToHtmlStringRGB(pixelColor);
         int tileIndex = int.Parse(ColorUtility.ToHtmlStringRGB(pixelColor), System.Globalization.NumberStyles.HexNumber);
 
-        if (tileMapType == TileMapType.FOREGROUND)
+        if (tileMapType == TileMapType.OBSTACLES)
         {
-            
-            if (!LevelManager.transition)
+
+            if (!transition)
             {
                 //coins have a decimal of 10879231
-                if (tileIndex > obstacleTiles[(int)LevelManager.levelSection].Length && tileIndex != 10879231)
+                if (tileIndex > obstacleTiles[(int)levelSection].Length && tileIndex != 10879231)
                     Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
                 else
                 {
@@ -274,41 +290,47 @@ private void Awake()
                     }
                     else
                     {
-                        tileMap.SetTile(gridPos, obstacleTiles[(int)LevelManager.levelSection][tileIndex]);
+                        tileMap.SetTile(gridPos, obstacleTiles[(int)levelSection][tileIndex]);
                         Instantiate(obstaclePrefab, obstacleFolder.transform).transform.position = pos;
                     }
                 }
-                    
-                    
             }
             else
             {
+                //Debug.Log("Transition Tile (" + x + ", " + y + ") is at " + gridPos + " and has an index of " + tileIndex);
                 int transitionIndex = GetTransitionIndex();
+                //Debug.Log("Tile for " + map.name + " at " + "(" + x + ", " + y + ") = " + transitionTiles[transitionIndex][tileIndex]);
                 if (tileIndex > transitionTiles[transitionIndex].Length)
                     Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
                 else
+                {
                     tileMap.SetTile(gridPos, transitionTiles[transitionIndex][tileIndex]);
+                    if(x == 0)
+                        Instantiate(transitionTileColliderPrefab, obstacleFolder.transform).transform.position = pos;
+                }
             }
 
         }
         else
         {
-            int sectionIndex = LevelManager.transition ? (int)LevelManager.levelSection - 1 : (int)LevelManager.levelSection;
-            if (tileIndex > environmentTiles[sectionIndex].Length)
+            if (tileIndex > environmentTiles[(int)levelSection].Length)
                 Debug.LogError("Error for " + map.name + " at " + "(" + x + ", " + y + ") = " + tileIndex);
             else
-                tileMap.SetTile(gridPos, environmentTiles[sectionIndex][tileIndex]);
+                tileMap.SetTile(gridPos, environmentTiles[(int)levelSection][tileIndex]);
         }
 
     }
 
-    public void GenerateCredits()
+    public static void GenerateCredits()
     {
-        Vector3 pos = (Vector2)(LevelManager.cam.transform.position) + Vector2.up * 4.5f;
+        Vector3 pos = (Vector2)(LevelManager.cam.transform.position) + Vector2.down * 5;
         pos.y -= distanceToPlace;
-        pos.y -= creditPlaceDistance;
+        pos.y -= creditsPlaceDistance;
         Instantiate(creditsPrefab, obstacleFolder.transform).transform.position = pos;
-        
+        RectTransform canvas = GameObject.Find("Credits(Clone)").GetComponent<RectTransform>();
+        pos.y += (canvas.rect.height * canvas.localScale.y) / 2 + 5;
+        Instantiate(transitionColliderPrefab, obstacleFolder.transform).transform.position = pos;
+
     }
 
     private static void ClearRowOfTiles(Vector2 startPosition, Vector2 endPosition)
@@ -321,27 +343,31 @@ private void Awake()
                 Vector3Int gridPos = tilemap.WorldToCell(startPosition + Vector2.right * i);
                 if (tilemap.HasTile(gridPos))
                     tilemap.SetTile(gridPos, null);
-
             }
         }
     }
 
     private static int GetTransitionIndex()
     {
-        switch (LevelManager.levelSection)
+        switch (levelSection)
         {
-            case LevelSection.MANTLE:
+            case LevelSection.CRUST:
                 return 0;
+            case LevelSection.MANTLE:
+                return 1;
+                //when core transition tile added
             case LevelSection.CORE:
                 return 1;
+                
         }
+        Debug.LogError("can't transition at level section " + levelSection);
         return -1;
     }
 
     public enum TileMapType
     {
+        OBSTACLES,
         FOREGROUND,
-        FEEDTAPE,
         BACKGROUND
     }
 
