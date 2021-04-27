@@ -5278,7 +5278,7 @@ MonoBehaviour:
   timeChargePrice: {fileID: 1426627357}
   suitMaxed: {fileID: 1411514433}
   upgradeSuit: {fileID: 1921304567}
-  suit1: {fileID: -7823780165112437224, guid: 2ac815230cac91f4c9c400cbeae8b96e, type: 3}
+  suit1: {fileID: 4845375760212792221, guid: 19e3eb0faec3a174e907508b5690700b, type: 3}
   soldOut: {fileID: 0}
   bubbleMaxed: {fileID: 1195256927}
   upgradeBubble: {fileID: 618448212}
@@ -5390,7 +5390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &364157294
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7263,8 +7263,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -222, y: 98.5}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -217.84, y: 100.16}
+  m_SizeDelta: {x: 111.92, y: 41.59427}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &601016319
 MonoBehaviour:
@@ -7327,13 +7327,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601016317}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -23000,7 +23000,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1063602300
 RectTransform:
@@ -25682,7 +25682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ccaf129a02c1c34a86fae89698f18e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyP: 0
+  moneyP: 130
   bubblesP: 0
   timeSlowsP: 0
   suitLevelP: 0
@@ -28669,15 +28669,15 @@ RectTransform:
   m_GameObject: {fileID: 1921304565}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 237637384}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 215.29997, y: 125}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 217.71, y: 151}
+  m_SizeDelta: {x: 177.97461, y: 210.79132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1921304567
 MonoBehaviour:

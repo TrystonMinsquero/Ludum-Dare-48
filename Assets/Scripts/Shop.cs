@@ -79,8 +79,11 @@ public class Shop : MonoBehaviour
     {
         SoundManager.playSound(SoundManager.hoverItem);
 
-        
-        speechBubble.text = "Upgrade your suit to help you survive deeper depths!";
+        if(DataControl.suitLevel == 0)
+            speechBubble.text = "Upgrade your suit to help you survive deeper depths for 30 Gems!";
+        if(DataControl.suitLevel == 1)
+            speechBubble.text = "Upgrade your suit to help you survive deeper depths for 100 Gems!";
+
         //Debug.Log("HOVERING SUIT!!");
     }
     public void unhoverSuit()
@@ -108,7 +111,7 @@ public class Shop : MonoBehaviour
     {
         SoundManager.playSound(SoundManager.hoverItem);
         bubbleAnim.Play("BubbleShop_1");
-        speechBubble.text = "A bubble might help with obstacles!";
+        speechBubble.text = "Buy that bubble for only "+DataControl.bubbleCost+". It might save your life down there!";
         //Debug.Log("HOVERING BUBBLE!!");
     }
     public void unhoverBubble()
